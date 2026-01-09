@@ -92,26 +92,19 @@ function AttendanceList() {
     <div className="attendance-list">
       <h2>観戦予定一覧</h2>
       
-      {/* フィルターボタン */}
+      {/* フィルター（プルダウン） */}
       <div className="attendance-filters">
-        <button
-          className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
-          onClick={() => setFilter('all')}
+        <label htmlFor="category-filter" className="filter-label">カテゴリ:</label>
+        <select
+          id="category-filter"
+          className="filter-select"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
         >
-          すべて ({attendancePlans.length})
-        </button>
-        <button
-          className={`filter-btn ${filter === 'venue' ? 'active' : ''}`}
-          onClick={() => setFilter('venue')}
-        >
-          現地観戦予定 ({venueCount})
-        </button>
-        <button
-          className={`filter-btn ${filter === 'broadcast' ? 'active' : ''}`}
-          onClick={() => setFilter('broadcast')}
-        >
-          放送視聴予定 ({broadcastCount})
-        </button>
+          <option value="all">すべて ({attendancePlans.length})</option>
+          <option value="venue">現地観戦予定 ({venueCount})</option>
+          <option value="broadcast">放送視聴予定 ({broadcastCount})</option>
+        </select>
       </div>
 
       <div className="attendance-count">

@@ -9,6 +9,7 @@
   color: white;
   padding: 1rem 2rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .app-header h1 {
@@ -66,8 +67,27 @@
 
 /* モバイル対応 */
 @media (max-width: 768px) {
+  .app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+
+  .app-header h1 {
+    margin: 0;
+    flex: 1;
+  }
+
+  .app-nav {
+    position: static;
+  }
+
   .hamburger-menu {
     display: flex;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
   }
 
   .nav-links {
