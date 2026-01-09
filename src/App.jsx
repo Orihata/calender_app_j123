@@ -144,9 +144,7 @@ function Nav() {
           設定
         </Link>
       </div>
-      {isMenuOpen && (
-        <div className="nav-overlay" onClick={closeMenu}></div>
-      )}
+      <div className={`nav-overlay ${isMenuOpen ? 'active' : ''}`} onClick={closeMenu}></div>
     </nav>
   )
 }

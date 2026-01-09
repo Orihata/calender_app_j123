@@ -12,7 +12,9 @@ function AttendanceList() {
   const [attendancePlans, setAttendancePlans] = useState([])
   const [loading, setLoading] = useState(true)
   const [deleting, setDeleting] = useState({})
-  const [filter, setFilter] = useState('all') // 'all', 'venue', 'broadcast'
+  const [selectedCategories, setSelectedCategories] = useState(['venue', 'broadcast']) // 初期値は両方選択
+  const [infoModal, setInfoModal] = useState(null) // { matchId, content }
+  const [isEditMode, setIsEditMode] = useState(false) // 閲覧モード/編集モード
 
   // 観戦予定を読み込む
   useEffect(() => {
@@ -61,10 +63,26 @@ function AttendanceList() {
     }
   }
 
+  /**
+   * カテゴリボタンのトグル
+   */
+  const toggleCategory = (category) => {
+    setSelectedCategories(prev => {
+      if (prev.includes(category)) {
+        // 選択解除（ただし、両方解除されることはないようにする）
+        const newCategories = prev.filter(c => c !== category)
+        return newCategories.length > 0 ? newCategories : prev
+      } else {
+        // 選択追加
+        return [...prev, category]
+      }
+    })
+  }
+
   // フィルタリングされた観戦予定を取得
-  const filteredPlans = filter === 'all' 
-    ? attendancePlans 
-    : attendancePlans.filter(({ plan }) => plan.category === filter)
+  const filteredPlans = attendancePlans.filter(({ plan }) => 
+    selectedCategories.includes(plan.category)
+  )
 
   // カテゴリ別の件数を計算
   const venueCount = attendancePlans.filter(({ plan }) => plan.category === 'venue').length
@@ -92,27 +110,39 @@ function AttendanceList() {
     <div className="attendance-list">
       <h2>観戦予定一覧</h2>
       
-      {/* フィルター（プルダウン） */}
-      <div className="attendance-filters">
-        <label htmlFor="category-filter" className="filter-label">カテゴリ:</label>
-        <select
-          id="category-filter"
-          className="filter-select"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
+      {/* フィルターと編集モードトグル */}
+      <div className="attendance-controls">
+        <div className="attendance-filters">
+          <button
+            className={`category-button ${selectedCategories.includes('venue') ? 'active venue' : ''}`}
+            onClick={() => toggleCategory('venue')}
+            type="button"
+          >
+            現地観戦 ({venueCount})
+          </button>
+          <button
+            className={`category-button ${selectedCategories.includes('broadcast') ? 'active broadcast' : ''}`}
+            onClick={() => toggleCategory('broadcast')}
+            type="button"
+          >
+            放送観戦 ({broadcastCount})
+          </button>
+        </div>
+
+        {/* 閲覧/編集モードボタン */}
+        <button
+          className={`edit-mode-button ${isEditMode ? 'active' : ''}`}
+          onClick={() => setIsEditMode(!isEditMode)}
+          type="button"
         >
-          <option value="all">すべて ({attendancePlans.length})</option>
-          <option value="venue">現地観戦予定 ({venueCount})</option>
-          <option value="broadcast">放送視聴予定 ({broadcastCount})</option>
-        </select>
+          {isEditMode ? '編集' : '閲覧'}
+        </button>
       </div>
 
       <div className="attendance-count">
-        {filter === 'all' 
-          ? `全${attendancePlans.length}件の観戦予定`
-          : filter === 'venue'
-          ? `現地観戦予定: ${filteredPlans.length}件`
-          : `放送視聴予定: ${filteredPlans.length}件`}
+        {filteredPlans.length > 0 
+          ? `表示中: ${filteredPlans.length}件の観戦予定`
+          : '該当する観戦予定がありません'}
       </div>
 
       {filteredPlans.length === 0 ? (
@@ -121,89 +151,119 @@ function AttendanceList() {
         </div>
       ) : (
         <div className="attendance-items">
-          {filteredPlans.map(({ plan, match }) => (
-          <div key={plan.id} className="attendance-item">
-            {/* カテゴリタグ */}
-            <div className="attendance-category-tag">
-              <span className={`tag tag-${plan.category}`}>
-                {plan.getCategoryLabel()}
-              </span>
-            </div>
-            
-            <div className="attendance-header">
-              <div className="attendance-teams">
-                <span className="home-team">{match.homeTeam}</span>
-                <span className="vs">vs</span>
-                <span className="away-team">{match.awayTeam}</span>
-              </div>
-              <div className="attendance-time">
-                {match.kickoff === '未定' ? (
-                  <span className="time-undefined">未定</span>
-                ) : (
-                  <span className="time">{match.kickoff}</span>
+          {filteredPlans.map(({ plan, match }) => {
+            // グループとラウンドを結合
+            const groupRoundText = [match.group, match.round ? `第${match.round}節` : null]
+              .filter(Boolean)
+              .join(' ')
+
+            // カテゴリに基づいてクラスを決定
+            const attendanceItemClass = `attendance-item ${plan.category === 'venue' ? 'has-venue' : 'has-broadcast'}`
+
+            return (
+              <div key={plan.id} className={attendanceItemClass}>
+                {/* 左上: グループ+ラウンド */}
+                {groupRoundText && (
+                  <div className="attendance-group-round">
+                    {groupRoundText}
+                  </div>
+                )}
+
+                {/* 右上: 情報アイコンとKO時間 */}
+                <div className="attendance-header-right">
+                  {match.additionalInfo && (
+                    <button
+                      className="info-icon-button"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        setInfoModal({ matchId: match.id, content: match.additionalInfo })
+                      }}
+                      title="追加情報"
+                      type="button"
+                    >
+                      <span className="info-icon">i</span>
+                    </button>
+                  )}
+                  <div className="attendance-time">
+                    {match.kickoff === '未定' ? (
+                      <span className="time-undefined">未定</span>
+                    ) : (
+                      <span className="time">{match.kickoff}</span>
+                    )}
+                  </div>
+                </div>
+
+                {/* 試合日 */}
+                <div className="attendance-date">
+                  {match.dateTime ? (
+                    <span className="date-text">
+                      {format(parseISO(match.dateTime), 'yyyy年M月d日(E)', { locale: ja })}
+                    </span>
+                  ) : (
+                    <span className="date-text">
+                      {format(parseISO(`${match.date}T00:00:00+09:00`), 'yyyy年M月d日(E)', { locale: ja })}
+                    </span>
+                  )}
+                </div>
+
+                {/* 中央: 両クラブ */}
+                <div className="attendance-teams">
+                  <span className="home-team">{match.homeTeam}</span>
+                  <span className="vs">vs</span>
+                  <span className="away-team">{match.awayTeam}</span>
+                </div>
+
+                <div className="attendance-details">
+                  {plan.category === 'venue' && match.venue && (
+                    <div className="attendance-venue">
+                      <span className="label">会場:</span>
+                      <span className="value">{match.venue}</span>
+                    </div>
+                  )}
+
+                  {plan.category === 'broadcast' && match.broadcast && (
+                    <div className="attendance-broadcast">
+                      <span className="label">放送:</span>
+                      <span className="value">{match.broadcast}</span>
+                    </div>
+                  )}
+                </div>
+
+                {isEditMode && (
+                  <div className="attendance-actions">
+                    <button
+                      className="btn-delete"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        handleDelete(plan.id)
+                      }}
+                      disabled={deleting[plan.id]}
+                      type="button"
+                    >
+                      {deleting[plan.id] ? '削除中...' : '観戦予定から削除'}
+                    </button>
+                  </div>
                 )}
               </div>
+            )
+          })}
+        </div>
+      )}
+
+      {/* 情報モーダル */}
+      {infoModal && (
+        <div className="modal-overlay" onClick={() => setInfoModal(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>追加情報</h3>
+              <button className="modal-close" onClick={() => setInfoModal(null)}>×</button>
             </div>
-
-            <div className="attendance-details">
-              {match.venue && (
-                <div className="attendance-venue">
-                  <span className="label">会場:</span>
-                  <span className="value">{match.venue}</span>
-                </div>
-              )}
-
-              {match.dateTime && (
-                <div className="attendance-datetime">
-                  <span className="label">日時:</span>
-                  <span className="value">
-                    {format(parseISO(match.dateTime), 'yyyy年MM月dd日 HH:mm', { locale: ja })}
-                  </span>
-                </div>
-              )}
-
-              {match.kickoff === '未定' && (
-                <div className="attendance-datetime">
-                  <span className="label">日付:</span>
-                  <span className="value">
-                    {format(parseISO(`${match.date}T00:00:00+09:00`), 'yyyy年MM月dd日', { locale: ja })}
-                  </span>
-                </div>
-              )}
-
-              {match.group && (
-                <div className="attendance-group">
-                  <span className="label">グループ:</span>
-                  <span className="value">{match.group}</span>
-                </div>
-              )}
-
-              {match.round && (
-                <div className="attendance-round">
-                  <span className="label">ラウンド:</span>
-                  <span className="value">第{match.round}節</span>
-                </div>
-              )}
-
-              {match.broadcast && (
-                <div className="attendance-broadcast">
-                  <span className="label">放送:</span>
-                  <span className="value">{match.broadcast}</span>
-                </div>
-              )}
-            </div>
-
-            <div className="attendance-actions">
-              <button
-                className="btn-delete"
-                onClick={() => handleDelete(plan.id)}
-                disabled={deleting[plan.id]}
-              >
-                {deleting[plan.id] ? '削除中...' : '観戦予定から削除'}
-              </button>
+            <div className="modal-body">
+              <p>{infoModal.content}</p>
             </div>
           </div>
-          ))}
         </div>
       )}
     </div>

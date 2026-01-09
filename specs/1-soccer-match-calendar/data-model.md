@@ -28,7 +28,7 @@ Match (試合予定)
 - `group` (string, optional): グループ（EAST/WEST等）
 - `round` (string, optional): ラウンド番号
 - `broadcast` (string, optional): 放送局情報
-- `additionalInfo` (string, optional): その他の情報（必要に応じてgroup、round、broadcastを結合）
+- `additionalInfo` (string, optional): その他の情報（CSVの`Etc`カラムから取得）
 - `createdAt` (string, required): 作成日時（ISO 8601形式）
 - `updatedAt` (string, required): 更新日時（ISO 8601形式）
 
@@ -93,7 +93,7 @@ Match (試合予定)
 **制約**:
 - `matchId` は存在するMatchのIDを参照しなければならない
 - 同じ `matchId` と `category` の組み合わせに対して複数のAttendancePlanは作成できない（一意制約）
-- 同じ試合に対して「現地観戦予定」と「放送視聴予定」の両方を登録可能
+- **排他選択**: 同じ試合に対して「現地観戦予定」と「放送視聴予定」は排他的に動作する（一方を選択すると他方が自動的に削除される）
 
 **例（現地観戦予定）**:
 ```json

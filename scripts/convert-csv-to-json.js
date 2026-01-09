@@ -78,12 +78,8 @@ Papa.parse(csvContent, {
         }
       }
 
-      // additionalInfoの生成
-      const additionalInfoParts = []
-      if (row.Group) additionalInfoParts.push(row.Group)
-      if (row.Round) additionalInfoParts.push(`第${row.Round}節`)
-      if (row.Broadcast) additionalInfoParts.push(row.Broadcast)
-      const additionalInfo = additionalInfoParts.length > 0 ? additionalInfoParts.join(' ') : null
+      // additionalInfoの生成（Etcカラムを使用）
+      const additionalInfo = row.Etc ? row.Etc.trim() : null
 
       // Matchオブジェクトを作成
       const now = new Date().toISOString()

@@ -20,16 +20,19 @@ function Calendar() {
 
   // 試合予定と観戦予定を読み込む
   useEffect(() => {
-    loadMatches()
+    loadMatches(true) // 初期読み込み時はローディングを表示
     loadAttendancePlans()
   }, [])
 
   /**
    * 試合予定を読み込む
+   * @param {boolean} showLoading - ローディング表示するかどうか（デフォルト: false）
    */
-  const loadMatches = async () => {
+  const loadMatches = async (showLoading = false) => {
     try {
-      setLoading(true)
+      if (showLoading) {
+        setLoading(true)
+      }
       const allMatches = await getAllMatches()
       setMatches(allMatches)
       
@@ -39,7 +42,9 @@ function Calendar() {
     } catch (error) {
       console.error('試合予定の読み込みエラー:', error)
     } finally {
-      setLoading(false)
+      if (showLoading) {
+        setLoading(false)
+      }
     }
   }
 
@@ -114,7 +119,7 @@ function Calendar() {
           <button onClick={handleNextMonth} className="btn-nav">次月 →</button>
         </div>
         <div className="calendar-month">
-          {format(currentDate, 'yyyy年MM月', { locale: ja })}
+          {format(currentDate, 'yyyy年M月', { locale: ja })}
         </div>
       </div>
 
@@ -164,13 +169,13 @@ function Calendar() {
       {selectedDate && (
         <div className="selected-date-matches">
           <h3>
-            {format(selectedDate, 'yyyy年MM月dd日', { locale: ja })}の試合
+            {format(selectedDate, 'yyyy年M月d日', { locale: ja })}の試合
           </h3>
           {selectedDateMatches.length > 0 ? (
             <MatchList 
               matches={selectedDateMatches} 
               onAttendanceChange={() => {
-                loadMatches()
+                loadMatches(false) // ローディングを表示しない
                 loadAttendancePlans()
               }}
             />
