@@ -1,0 +1,50 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# GitHub Pages
+# distディレクトリはGitHub Actionsでビルドされるため、.gitignoreに含めます
+# ただし、gh-pagesブランチを使用する場合は、この行をコメントアウトしてください
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environment variables
+.env
+.env.local
+.env.production.local
+.env.development.local
+
+# Testing
+coverage
+.nyc_output
+
+# Large files and binaries
+*.deb
+*.rpm
+*.dmg
+*.pkg
+*.exe
+*.msi
+*.zip
+*.tar.gz
+*.tar.bz2
+amazon-q.deb

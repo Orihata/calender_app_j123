@@ -1,0 +1,35 @@
+{
+  "name": "soccer-match-calendar",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "サッカー試合予定カレンダーアプリケーション",
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "generate-master-data": "node scripts/convert-csv-to-json.js"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.0"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.23.5",
+    "@babel/preset-react": "^7.23.3",
+    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/react": "^14.1.2",
+    "@testing-library/user-event": "^14.5.1",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "date-fns": "^4.1.0",
+    "jest": "^29.7.0",
+    "papaparse": "^5.5.3",
+    "vite": "^5.0.8"
+  }
+}
