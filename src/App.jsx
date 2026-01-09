@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom'
+import { HashRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom'
 import Calendar from './components/Calendar/Calendar.jsx'
 import ImportCSV from './components/ImportCSV/ImportCSV.jsx'
 import AttendanceList from './components/AttendanceList/AttendanceList.jsx'
