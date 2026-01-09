@@ -17,16 +17,18 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* 現地観戦予定のカード枠を青に */
+/* 現地観戦予定のカード: 薄い青の背景 */
 .match-item.has-venue {
-  border-color: #007bff;
-  border-width: 2px;
+  background-color: #b3d9ff;
+  border-color: #ddd;
+  border-width: 1px;
 }
 
-/* 放送視聴予定のカード枠を緑に */
+/* 放送視聴予定のカード: 薄い緑の背景 */
 .match-item.has-broadcast {
-  border-color: #28a745;
-  border-width: 2px;
+  background-color: #b3ffb3;
+  border-color: #ddd;
+  border-width: 1px;
 }
 
 /* 左上: グループ+ラウンド */
@@ -181,19 +183,19 @@
 }
 
 .btn-remove.btn-venue {
-  background-color: #dc3545;
+  background-color: #6c757d;
 }
 
 .btn-remove.btn-venue:hover:not(:disabled) {
-  background-color: #c82333;
+  background-color: #5a6268;
 }
 
 .btn-remove.btn-broadcast {
-  background-color: #dc3545;
+  background-color: #6c757d;
 }
 
 .btn-remove.btn-broadcast:hover:not(:disabled) {
-  background-color: #c82333;
+  background-color: #5a6268;
 }
 
 /* モバイル対応 */

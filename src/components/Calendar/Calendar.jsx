@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo, useRef } from 'react'
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, startOfWeek, endOfWeek, addMonths, subMonths, isSameMonth, isSameDay, parseISO } from 'date-fns'
 import { ja } from 'date-fns/locale'
 import { getAllMatches, getMatchesByDate, buildDateIndex } from '../../services/matchService.js'
-import { getAllAttendancePlans } from '../../services/attendanceService.js'
+import { getAllAttendancePlans, deleteAttendancePlanByMatchIdAndCategory } from '../../services/attendanceService.js'
 import MatchList from './MatchList.jsx'
 import './Calendar.css'
 
@@ -17,6 +17,8 @@ function Calendar() {
   const [matchesByDate, setMatchesByDate] = useState({})
   const [attendancePlans, setAttendancePlans] = useState([])
   const [loading, setLoading] = useState(true)
+  const [candyBarHeight, setCandyBarHeight] = useState(0)
+  const candyBarRef = useRef(null)
 
   // 試合予定と観戦予定を読み込む
   useEffect(() => {
@@ -101,6 +103,69 @@ function Calendar() {
     ? matchesByDate[format(selectedDate, 'yyyy-MM-dd')] || []
     : []
 
+  // 選択された日付で観戦予定がある試合を取得（キャンディーバー用）
+  const attendanceMatchesForCandyBar = useMemo(() => {
+    if (!selectedDate) return []
+    
+    const dateStr = format(selectedDate, 'yyyy-MM-dd')
+    const dayMatches = matchesByDate[dateStr] || []
+    
+    return dayMatches
+      .map(match => {
+        const plans = attendancePlans.filter(plan => plan.matchId === match.id)
+        const venuePlan = plans.find(p => p.category === 'venue')
+        const broadcastPlan = plans.find(p => p.category === 'broadcast')
+        
+        if (venuePlan) {
+          return { match, category: 'venue', plan: venuePlan }
+        } else if (broadcastPlan) {
+          return { match, category: 'broadcast', plan: broadcastPlan }
+        }
+        return null
+      })
+      .filter(Boolean)
+  }, [selectedDate, matchesByDate, attendancePlans])
+
+  // キャンディーバーの高さを測定
+  useEffect(() => {
+    if (candyBarRef.current && attendanceMatchesForCandyBar.length > 0) {
+      const updateHeight = () => {
+        if (candyBarRef.current) {
+          const height = candyBarRef.current.offsetHeight
+          setCandyBarHeight(height)
+        }
+      }
+      
+      // 初回測定
+      updateHeight()
+      
+      // リサイズ時にも再測定
+      const resizeObserver = new ResizeObserver(updateHeight)
+      resizeObserver.observe(candyBarRef.current)
+      
+      return () => {
+        if (candyBarRef.current) {
+          resizeObserver.unobserve(candyBarRef.current)
+        }
+      }
+    } else {
+      setCandyBarHeight(0)
+    }
+  }, [attendanceMatchesForCandyBar])
+
+  /**
+   * キャンディーバーから観戦予定を削除
+   */
+  const handleRemoveFromCandyBar = async (matchId, category) => {
+    try {
+      await deleteAttendancePlanByMatchIdAndCategory(matchId, category)
+      await loadAttendancePlans()
+      await loadMatches(false)
+    } catch (error) {
+      alert(`観戦予定の削除に失敗しました: ${error.message}`)
+    }
+  }
+
   if (loading) {
     return (
       <div className="calendar-loading">
@@ -110,7 +175,12 @@ function Calendar() {
   }
 
   return (
-    <div className="calendar-container">
+    <div 
+      className="calendar-container"
+      style={{
+        paddingBottom: candyBarHeight > 0 ? `${candyBarHeight + 20}px` : '0'
+      }}
+    >
       <div className="calendar-header">
         <h2>試合予定カレンダー</h2>
         <div className="calendar-controls">
@@ -182,6 +252,46 @@ function Calendar() {
           ) : (
             <p className="no-matches">この日の試合予定はありません</p>
           )}
+        </div>
+      )}
+
+      {/* キャンディーバー: 選択された日付で観戦予定がある試合を画面下部に固定表示 */}
+      {selectedDate && attendanceMatchesForCandyBar.length > 0 && (
+        <div className="attendance-candy-bar" ref={candyBarRef}>
+          {attendanceMatchesForCandyBar.map(({ match, category }) => {
+            // カテゴリに応じたラベルと情報を取得
+            const categoryLabel = category === 'venue' ? '観戦' : '視聴'
+            const locationInfo = category === 'venue' ? match.venue : match.broadcast
+            
+            // 表示テキストを構築（カテゴリラベルを除く）
+            const displayText = [
+              `${match.homeTeam} vs ${match.awayTeam}`,
+              match.kickoff,
+              locationInfo || ''
+            ].filter(Boolean).join(' ')
+
+            return (
+              <div
+                key={`${match.id}-${category}`}
+                className={`candy-bar-item candy-bar-${category}`}
+              >
+                <span className={`candy-bar-category candy-bar-category-${category}`}>
+                  {categoryLabel}
+                </span>
+                <span className="candy-bar-text">
+                  {displayText}
+                </span>
+                <button
+                  className="candy-bar-remove"
+                  onClick={() => handleRemoveFromCandyBar(match.id, category)}
+                  type="button"
+                  title="取り消し"
+                >
+                  ×
+                </button>
+              </div>
+            )
+          })}
         </div>
       )}
     </div>
