@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { manifestBasePath } from './vite-plugin-manifest.js'
 
 // GitHub Pages用のbaseパス設定
 // リポジトリ名: calender_app_j123
@@ -20,7 +21,10 @@ function getBasePath() {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    manifestBasePath() // manifest.jsonのbaseパスを動的に設定
+  ],
   base: getBasePath(),
   server: {
     port: 5173,
