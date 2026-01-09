@@ -130,7 +130,9 @@ function Calendar() {
               >
                 <div className="day-number">{format(day, 'd')}</div>
                 {dayMatches.length > 0 && (
-                  <div className="match-count">{dayMatches.length}試合</div>
+                  <div className="match-badge" title={`${dayMatches.length}試合`}>
+                    {dayMatches.length}
+                  </div>
                 )}
               </div>
             )

@@ -93,33 +93,60 @@ function App() {
  */
 function Nav() {
   const location = useLocation()
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false)
+  
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen)
+  }
+  
+  const closeMenu = () => {
+    setIsMenuOpen(false)
+  }
   
   return (
     <nav className="app-nav">
-      <Link 
-        to="/" 
-        className={location.pathname === '/' ? 'active' : ''}
+      <button 
+        className="hamburger-menu"
+        onClick={toggleMenu}
+        aria-label="メニューを開く"
       >
-        カレンダー
-      </Link>
-      <Link 
-        to="/import" 
-        className={location.pathname === '/import' ? 'active' : ''}
-      >
-        CSVインポート
-      </Link>
-      <Link 
-        to="/attendance" 
-        className={location.pathname === '/attendance' ? 'active' : ''}
-      >
-        観戦予定
-      </Link>
-      <Link 
-        to="/settings" 
-        className={location.pathname === '/settings' ? 'active' : ''}
-      >
-        設定
-      </Link>
+        <span className="hamburger-icon"></span>
+        <span className="hamburger-icon"></span>
+        <span className="hamburger-icon"></span>
+      </button>
+      <div className={`nav-links ${isMenuOpen ? 'open' : ''}`}>
+        <Link 
+          to="/" 
+          className={location.pathname === '/' ? 'active' : ''}
+          onClick={closeMenu}
+        >
+          カレンダー
+        </Link>
+        <Link 
+          to="/import" 
+          className={location.pathname === '/import' ? 'active' : ''}
+          onClick={closeMenu}
+        >
+          CSVインポート
+        </Link>
+        <Link 
+          to="/attendance" 
+          className={location.pathname === '/attendance' ? 'active' : ''}
+          onClick={closeMenu}
+        >
+          観戦予定
+        </Link>
+        <Link 
+          to="/settings" 
+          className={location.pathname === '/settings' ? 'active' : ''}
+          onClick={closeMenu}
+        >
+          設定
+        </Link>
+      </div>
+      {isMenuOpen && (
+        <div className="nav-overlay" onClick={closeMenu}></div>
+      )}
     </nav>
   )
 }
