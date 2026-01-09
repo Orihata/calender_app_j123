@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, startOfWeek, endOfWeek, addMonths, subMonths, isSameMonth, isSameDay, parseISO } from 'date-fns'
 import { ja } from 'date-fns/locale'
 import { getAllMatches, getMatchesByDate, buildDateIndex } from '../../services/matchService.js'
+import { getAllAttendancePlans } from '../../services/attendanceService.js'
 import MatchList from './MatchList.jsx'
 import './Calendar.css'
 
@@ -14,11 +15,13 @@ function Calendar() {
   const [selectedDate, setSelectedDate] = useState(null)
   const [matches, setMatches] = useState([])
   const [matchesByDate, setMatchesByDate] = useState({})
+  const [attendancePlans, setAttendancePlans] = useState([])
   const [loading, setLoading] = useState(true)
 
-  // 試合予定を読み込む
+  // 試合予定と観戦予定を読み込む
   useEffect(() => {
     loadMatches()
+    loadAttendancePlans()
   }, [])
 
   /**
@@ -37,6 +40,18 @@ function Calendar() {
       console.error('試合予定の読み込みエラー:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  /**
+   * 観戦予定を読み込む
+   */
+  const loadAttendancePlans = async () => {
+    try {
+      const plans = await getAllAttendancePlans()
+      setAttendancePlans(plans)
+    } catch (error) {
+      console.error('観戦予定の読み込みエラー:', error)
     }
   }
 
@@ -121,11 +136,16 @@ function Calendar() {
             const isCurrentMonth = isSameMonth(day, currentDate)
             const isToday = isSameDay(day, new Date())
             const isSelected = selectedDate && isSameDay(day, selectedDate)
+            
+            // その日の試合で観戦予定があるかチェック
+            const hasAttendance = dayMatches.some(match => 
+              attendancePlans.some(plan => plan.matchId === match.id)
+            )
 
             return (
               <div
                 key={index}
-                className={`calendar-day ${!isCurrentMonth ? 'other-month' : ''} ${isToday ? 'today' : ''} ${isSelected ? 'selected' : ''} ${dayMatches.length > 0 ? 'has-matches' : ''}`}
+                className={`calendar-day ${!isCurrentMonth ? 'other-month' : ''} ${isToday ? 'today' : ''} ${isSelected ? 'selected' : ''} ${dayMatches.length > 0 ? 'has-matches' : ''} ${hasAttendance ? 'has-attendance' : ''}`}
                 onClick={() => handleDateClick(day)}
               >
                 <div className="day-number">{format(day, 'd')}</div>
@@ -149,7 +169,10 @@ function Calendar() {
           {selectedDateMatches.length > 0 ? (
             <MatchList 
               matches={selectedDateMatches} 
-              onAttendanceChange={loadMatches}
+              onAttendanceChange={() => {
+                loadMatches()
+                loadAttendancePlans()
+              }}
             />
           ) : (
             <p className="no-matches">この日の試合予定はありません</p>

@@ -137,12 +137,25 @@
 }
 
 .calendar-day.has-matches {
-  border-color: #28a745;
+  border-color: #dc3545;
   border-width: 2px;
 }
 
 .calendar-day.has-matches.selected {
   border-color: #0056b3;
+}
+
+.calendar-day.has-attendance {
+  background-color: #fff9c4;
+}
+
+.calendar-day.has-attendance.today {
+  background-color: #fff59d;
+}
+
+.calendar-day.has-attendance.selected {
+  background-color: #007bff;
+  color: white;
 }
 
 .day-number {
