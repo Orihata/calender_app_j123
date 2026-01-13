@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { format, parseISO } from 'date-fns'
 import { ja } from 'date-fns/locale'
 import { getAllAttendancePlansWithMatches, deleteAttendancePlan } from '../../services/attendanceService.js'
+import WallpaperGenerator from '../common/WallpaperGenerator.jsx'
 import './AttendanceList.css'
 
 /**
@@ -15,6 +16,7 @@ function AttendanceList() {
   const [selectedCategories, setSelectedCategories] = useState(['venue', 'broadcast']) // 初期値は両方選択
   const [infoModal, setInfoModal] = useState(null) // { matchId, content }
   const [isEditMode, setIsEditMode] = useState(false) // 閲覧モード/編集モード
+  const [showWallpaperGenerator, setShowWallpaperGenerator] = useState(false) // 画像生成モーダル
 
   // 観戦予定を読み込む
   useEffect(() => {
@@ -129,14 +131,27 @@ function AttendanceList() {
           </button>
         </div>
 
-        {/* 閲覧/編集モードボタン */}
-        <button
-          className={`edit-mode-button ${isEditMode ? 'active' : ''}`}
-          onClick={() => setIsEditMode(!isEditMode)}
-          type="button"
-        >
-          {isEditMode ? '編集' : '閲覧'}
-        </button>
+        <div className="attendance-controls-right">
+          {/* 画像出力ボタン（現地観戦予定がある場合のみ表示） */}
+          {venueCount > 0 && (
+            <button
+              className="wallpaper-button"
+              onClick={() => setShowWallpaperGenerator(true)}
+              type="button"
+            >
+              画像出力
+            </button>
+          )}
+
+          {/* 閲覧/編集モードボタン */}
+          <button
+            className={`edit-mode-button ${isEditMode ? 'active' : ''}`}
+            onClick={() => setIsEditMode(!isEditMode)}
+            type="button"
+          >
+            {isEditMode ? '編集' : '閲覧'}
+          </button>
+        </div>
       </div>
 
       <div className="attendance-count">
@@ -265,6 +280,14 @@ function AttendanceList() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* 画像生成モーダル */}
+      {showWallpaperGenerator && (
+        <WallpaperGenerator
+          plansWithMatches={attendancePlans}
+          onClose={() => setShowWallpaperGenerator(false)}
+        />
       )}
     </div>
   )

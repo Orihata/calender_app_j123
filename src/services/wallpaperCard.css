@@ -1,0 +1,155 @@
+/* 待受画面カードのスタイル（card_layout_sample.json準拠） */
+
+.wallpaper-container {
+  width: 1080px;
+  height: 2400px;
+  position: relative;
+  font-family: 'BIZ UDGothic', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.wallpaper-card {
+  position: absolute;
+  width: 340px;
+  height: 135px;
+  border-radius: 8px;
+  padding: 0;
+  box-sizing: border-box;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  /* フォントレンダリングを最適化 */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* カテゴリ別のグラデーション背景 */
+.wallpaper-card.venue {
+  background: linear-gradient(135deg, #4A90E2 0%, #2E5C8A 100%);
+}
+
+.wallpaper-card.broadcast {
+  background: linear-gradient(135deg, #50C878 0%, #2E7D4E 100%);
+}
+
+/* グループ/ラウンド（上部） */
+.wallpaper-competition,
+.wallpaper-round {
+  position: absolute;
+  font-size: 14px; /* 28px * 0.516 ≈ 14px */
+  font-weight: 500;
+  color: #FFFFFF;
+  font-family: 'BIZ UDGothic', sans-serif;
+  white-space: nowrap;
+  line-height: 1;
+  text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.2);
+}
+
+.wallpaper-competition {
+  left: 15px; /* 30px * 0.516 ≈ 15px */
+  top: 18px; /* 35px * 0.516 ≈ 18px */
+}
+
+.wallpaper-round {
+  left: 72px; /* 140px * 0.516 ≈ 72px */
+  top: 18px;
+}
+
+/* 日付（左側中央、非常に大きい） */
+.wallpaper-date {
+  position: absolute;
+  left: 15px; /* 30px * 0.516 ≈ 15px */
+  top: 72px; /* 140px * 0.516 ≈ 72px */
+  font-size: 57px; /* 110px * 0.516 ≈ 57px */
+  font-weight: 700;
+  color: #FFFFFF;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  font-family: 'BIZ UDGothic', sans-serif;
+  white-space: nowrap;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+/* 曜日（日付の右側） */
+.wallpaper-dow {
+  position: absolute;
+  left: 139px; /* 270px * 0.516 ≈ 139px */
+  top: 88px; /* 170px * 0.516 ≈ 88px */
+  font-size: 16px; /* 32px * 0.516 ≈ 16px */
+  font-weight: 500;
+  color: #FFFFFF;
+  font-family: 'BIZ UDGothic', sans-serif;
+  white-space: nowrap;
+  line-height: 1;
+  text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* KO時間（左下） */
+.wallpaper-kickoff {
+  position: absolute;
+  left: 15px; /* 30px * 0.516 ≈ 15px */
+  top: 121px; /* 235px * 0.516 ≈ 121px */
+  font-size: 16px; /* 32px * 0.516 ≈ 16px */
+  font-weight: 500;
+  color: #FFFFFF;
+  font-family: 'BIZ UDGothic', sans-serif;
+  white-space: nowrap;
+  line-height: 1;
+  text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* 会場名（KO時間の右側） */
+.wallpaper-venue {
+  position: absolute;
+  left: 134px; /* 260px * 0.516 ≈ 134px */
+  top: 121px; /* 235px * 0.516 ≈ 121px */
+  font-size: 16px; /* 32px * 0.516 ≈ 16px */
+  font-weight: 500;
+  color: #FFFFFF;
+  font-family: 'BIZ UDGothic', sans-serif;
+  white-space: nowrap;
+  line-height: 1;
+  text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* ホームチーム（右側上部） */
+.wallpaper-home-team {
+  position: absolute;
+  left: 217px; /* 420px * 0.516 ≈ 217px */
+  top: 59px; /* 115px * 0.516 ≈ 59px */
+  font-size: 25px; /* 48px * 0.516 ≈ 25px */
+  font-weight: 500;
+  color: #FFFFFF;
+  font-family: 'BIZ UDGothic', sans-serif;
+  white-space: nowrap;
+  line-height: 1;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* アウェイチーム（右側下部） */
+.wallpaper-away-team {
+  position: absolute;
+  left: 248px; /* 480px * 0.516 ≈ 248px */
+  top: 101px; /* 195px * 0.516 ≈ 101px */
+  font-size: 25px; /* 48px * 0.516 ≈ 25px */
+  font-weight: 500;
+  color: #FFFFFF;
+  font-family: 'BIZ UDGothic', sans-serif;
+  white-space: nowrap;
+  line-height: 1;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* 警告メッセージ */
+.wallpaper-warning {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  font-weight: 400;
+  color: #FF6B6B;
+  font-family: 'BIZ UDGothic', sans-serif;
+  text-align: center;
+}

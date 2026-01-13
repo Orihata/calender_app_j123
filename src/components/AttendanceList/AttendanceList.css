@@ -17,6 +17,13 @@
   flex-wrap: wrap;
 }
 
+.attendance-controls-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
 .attendance-filters {
   display: flex;
   align-items: center;
@@ -356,6 +363,29 @@
 
 .modal-body p {
   margin: 0;
+}
+
+/* 画像出力ボタン */
+.wallpaper-button {
+  padding: 0.5rem 1rem;
+  border: 2px solid #10b981;
+  border-radius: 4px;
+  background-color: #10b981;
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+  white-space: nowrap;
+  min-width: auto;
+}
+
+.wallpaper-button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  background-color: #059669;
+  border-color: #059669;
 }
 
 /* 閲覧/編集モードボタン */

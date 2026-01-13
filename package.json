@@ -1,6 +1,6 @@
 {
   "name": "soccer-match-calendar",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "type": "module",
   "description": "サッカー試合予定カレンダーアプリケーション",
   "author": "",
@@ -14,6 +14,7 @@
     "generate-master-data": "node scripts/convert-csv-to-json.js"
   },
   "dependencies": {
+    "html2canvas": "^1.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.0"
