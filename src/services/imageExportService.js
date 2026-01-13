@@ -19,7 +19,7 @@ const cardLayoutSpec = {
   elements: [
     { id: 'competition', type: 'text', content: 'EAST', x: 30, y: 35, fontSize: 28, fontWeight: 500 },
     { id: 'round', type: 'text', content: '第10節', x: 140, y: 35, fontSize: 28, fontWeight: 500 },
-    { id: 'date', type: 'text', content: '12/16', x: 30, y: 95, fontSize: 110, fontWeight: 500 },
+    { id: 'date', type: 'text', content: '12/16', x: 30, y: 85, fontSize: 110, fontWeight: 500 },
     { id: 'dow', type: 'text', content: '金', x: 270, y: 170, fontSize: 32, fontWeight: 500 },
     { id: 'kickoff', type: 'text', content: '19:00', x: 30, y: 235, fontSize: 32, fontWeight: 400 },
     { id: 'venue', type: 'text', content: '日産ス', x: 260, y: 235, fontSize: 32, fontWeight: 500 },
