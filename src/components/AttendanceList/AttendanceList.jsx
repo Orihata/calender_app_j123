@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { format, parseISO } from 'date-fns'
 import { ja } from 'date-fns/locale'
-import { getAllAttendancePlansWithMatches, deleteAttendancePlan } from '../../services/attendanceService.js'
+import { getAllAttendancePlansWithMatches, deleteAttendancePlan, updateAttendancePlan } from '../../services/attendanceService.js'
 import WallpaperGenerator from '../common/WallpaperGenerator.jsx'
 import './AttendanceList.css'
 
@@ -65,6 +65,8 @@ function AttendanceList() {
   const [infoModal, setInfoModal] = useState(null) // { matchId, content }
   const [isEditMode, setIsEditMode] = useState(false) // 閲覧モード/編集モード
   const [showWallpaperGenerator, setShowWallpaperGenerator] = useState(false) // 画像生成モーダル
+  const [memoStates, setMemoStates] = useState({}) // { [planId]: memoText }
+  const [savingMemo, setSavingMemo] = useState({}) // { [planId]: boolean }
 
   // 観戦予定を読み込む
   useEffect(() => {
@@ -88,6 +90,12 @@ function AttendanceList() {
         return new Date(a.match.dateTime) - new Date(b.match.dateTime)
       })
       setAttendancePlans(sorted)
+      // メモ状態を初期化（既存のメモを状態に反映）
+      const initialMemoStates = {}
+      sorted.forEach(({ plan }) => {
+        initialMemoStates[plan.id] = plan.memo || ''
+      })
+      setMemoStates(prev => ({ ...prev, ...initialMemoStates }))
     } catch (error) {
       console.error('観戦予定の読み込みエラー:', error)
       alert(`観戦予定の読み込みに失敗しました: ${error.message}`)
@@ -108,11 +116,53 @@ function AttendanceList() {
       setDeleting(prev => ({ ...prev, [planId]: true }))
       await deleteAttendancePlan(planId)
       await loadAttendancePlans() // 一覧を再読み込み
+      // メモ状態もクリア
+      setMemoStates(prev => {
+        const newStates = { ...prev }
+        delete newStates[planId]
+        return newStates
+      })
     } catch (error) {
       alert(`観戦予定の削除に失敗しました: ${error.message}`)
     } finally {
       setDeleting(prev => ({ ...prev, [planId]: false }))
     }
+  }
+
+  /**
+   * メモを保存
+   */
+  const handleMemoSave = async (planId, memoText) => {
+    try {
+      setSavingMemo(prev => ({ ...prev, [planId]: true }))
+      // 空文字列や空白のみの場合はnullに変換
+      const memo = memoText && memoText.trim() ? memoText.trim() : null
+      await updateAttendancePlan(planId, { memo })
+      // メモ状態を更新
+      setMemoStates(prev => ({
+        ...prev,
+        [planId]: memo || ''
+      }))
+      // 一覧を再読み込み
+      await loadAttendancePlans()
+    } catch (error) {
+      console.error('メモの保存エラー:', error)
+      alert(`メモの保存に失敗しました: ${error.message}`)
+    } finally {
+      setSavingMemo(prev => ({ ...prev, [planId]: false }))
+    }
+  }
+
+  /**
+   * メモ入力欄の値を変更
+   */
+  const handleMemoChange = (planId, value) => {
+    // 最大20文字に制限
+    const truncatedValue = value.length > 20 ? value.slice(0, 20) : value
+    setMemoStates(prev => ({
+      ...prev,
+      [planId]: truncatedValue
+    }))
   }
 
   /**
@@ -302,6 +352,43 @@ function AttendanceList() {
                       <span className="label">放送:</span>
                       <span className="value">{match.broadcast}</span>
                     </div>
+                  )}
+                </div>
+
+                {/* メモ表示/編集欄 */}
+                <div className="attendance-memo">
+                  {isEditMode ? (
+                    // 編集モード: テキストボックスとして表示
+                    <>
+                      <input
+                        type="text"
+                        className="memo-input"
+                        placeholder="ひとことメモを入力...（最大20文字）"
+                        value={memoStates[plan.id] !== undefined ? memoStates[plan.id] : (plan.memo || '')}
+                        onChange={(e) => {
+                          handleMemoChange(plan.id, e.target.value)
+                        }}
+                        onBlur={(e) => {
+                          const currentMemo = plan.memo || ''
+                          const newMemo = memoStates[plan.id] !== undefined ? memoStates[plan.id] : ''
+                          if (currentMemo !== newMemo) {
+                            handleMemoSave(plan.id, newMemo)
+                          }
+                        }}
+                        maxLength={20}
+                        disabled={savingMemo[plan.id]}
+                      />
+                      {savingMemo[plan.id] && (
+                        <span className="memo-saving-indicator">保存中...</span>
+                      )}
+                    </>
+                  ) : (
+                    // 閲覧モード: テキストとして表示（メモがない場合は非表示）
+                    plan.memo && (
+                      <div className="memo-display">
+                        {plan.memo}
+                      </div>
+                    )
                   )}
                 </div>
 

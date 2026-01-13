@@ -114,6 +114,43 @@ export async function createAttendancePlan(matchId, category = 'venue') {
 }
 
 /**
+ * 観戦予定を更新
+ * @param {string} id - 観戦予定のID
+ * @param {Object} updates - 更新するフィールド
+ * @param {string|null} [updates.memo] - ひとことメモ
+ * @returns {Promise<AttendancePlan>} 更新された観戦予定
+ */
+export async function updateAttendancePlan(id, updates) {
+  const plans = await getAllAttendancePlans()
+  const planIndex = plans.findIndex(p => p.id === id)
+  
+  if (planIndex === -1) {
+    throw new Error('観戦予定が見つかりません')
+  }
+
+  const plan = plans[planIndex]
+  
+  // 更新フィールドを適用
+  if (updates.memo !== undefined) {
+    plan.memo = updates.memo && updates.memo.trim() ? updates.memo.trim() : null
+  }
+  
+  // updatedAtを更新
+  plan.updatedAt = new Date().toISOString()
+
+  // バリデーション
+  const validation = validateAttendancePlan(plan.toJSON())
+  if (!validation.valid) {
+    throw new Error(validation.errors.join(', '))
+  }
+
+  plans[planIndex] = plan
+  await saveAttendancePlans(plans.map(p => p.toJSON()))
+
+  return plan
+}
+
+/**
  * 観戦予定を削除
  * @param {string} id - 観戦予定のID
  * @returns {Promise<void>}

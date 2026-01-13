@@ -120,6 +120,105 @@ export function waitForFonts(fontFamily, weights = ['400', '500', '700']) {
 }
 
 /**
+ * フォントの読み込みを待つ（タイムアウト付き、iOS対策）
+ * @param {string} fontFamily - フォントファミリー名
+ * @param {Array<string>} weights - フォントウェイトの配列（デフォルト: ['400', '500', '700']）
+ * @param {number} timeout - タイムアウト時間（ミリ秒、デフォルト: 5000）
+ * @returns {Promise<void>}
+ */
+export function waitForFontsWithTimeout(fontFamily, weights = ['400', '500', '700'], timeout = 5000) {
+  return new Promise((resolve) => {
+    if (!document.fonts || !document.fonts.ready) {
+      resolve()
+      return
+    }
+
+    const startTime = Date.now()
+    let timeoutId = null
+
+    const checkFonts = () => {
+      const elapsed = Date.now() - startTime
+      if (elapsed >= timeout) {
+        // タイムアウト: フォントが読み込まれていなくても続行（iOS対策）
+        console.warn(`[FontLoader] フォント "${fontFamily}" の読み込みがタイムアウトしました。続行します。`)
+        if (timeoutId) clearTimeout(timeoutId)
+        resolve()
+        return
+      }
+
+      const allLoaded = weights.every(weight => isFontLoaded(fontFamily, weight))
+      if (allLoaded) {
+        if (timeoutId) clearTimeout(timeoutId)
+        resolve()
+      } else {
+        timeoutId = setTimeout(checkFonts, 100)
+      }
+    }
+
+    document.fonts.ready.then(() => {
+      checkFonts()
+    }).catch(() => {
+      // エラーが発生しても続行
+      if (timeoutId) clearTimeout(timeoutId)
+      resolve()
+    })
+
+    // タイムアウトのフォールバック
+    setTimeout(() => {
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+        console.warn(`[FontLoader] フォント "${fontFamily}" の読み込みがタイムアウトしました。続行します。`)
+        resolve()
+      }
+    }, timeout)
+  })
+}
+
+/**
+ * フォントを事前にロードする（iOS対策）
+ * @param {string} fontFamily - フォントファミリー名
+ * @param {Array<string>} weights - フォントウェイトの配列（デフォルト: ['400', '500', '700']）
+ * @returns {Promise<void>}
+ */
+export async function preloadFont(fontFamily, weights = ['400', '500', '700']) {
+  if (!document.fonts) {
+    return
+  }
+
+  // iOS対策: フォントを強制的に読み込むために、一時的な要素でフォントを使用
+  const testElement = document.createElement('span')
+  testElement.style.position = 'absolute'
+  testElement.style.left = '-9999px'
+  testElement.style.fontFamily = `"${fontFamily}", serif` // iOS対策: serifをフォールバックに指定
+  testElement.style.visibility = 'hidden'
+  testElement.textContent = 'あいうえお漢字' // 日本語文字を配置してフォントを強制的に読み込む
+  document.body.appendChild(testElement)
+
+  // iOS対策: フォントが確実に読み込まれるように少し待つ
+  await new Promise(resolve => setTimeout(resolve, 100))
+
+  // フォントが読み込まれているか確認
+  let allFontsLoaded = false
+  const maxAttempts = 50
+  let attempts = 0
+
+  while (!allFontsLoaded && attempts < maxAttempts) {
+    allFontsLoaded = weights.every(weight => isFontLoaded(fontFamily, weight))
+    if (allFontsLoaded) {
+      break
+    }
+    await new Promise(resolve => setTimeout(resolve, 100))
+    attempts++
+  }
+
+  document.body.removeChild(testElement)
+  
+  if (!allFontsLoaded) {
+    console.warn(`[FontLoader] フォント "${fontFamily}" の事前読み込みが完了しませんでしたが、続行します。`)
+  }
+}
+
+/**
  * HEXカラーをRGBに変換
  * @param {string} hex - HEX形式の色（例: #4A90E2）
  * @returns {Object} {r, g, b}

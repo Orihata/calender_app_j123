@@ -24,12 +24,22 @@
 .wallpaper-modal-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 20px;
 }
 
+.wallpaper-modal-title-section {
+  flex: 1;
+}
+
 .wallpaper-modal-header h3 {
-  margin: 0;
+  margin: 0 0 8px 0;
+}
+
+.wallpaper-warning-inline {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 4px;
 }
 
 .wallpaper-modal-close {
@@ -101,6 +111,15 @@
   color: #991b1b;
   border-radius: 4px;
   margin-top: 15px;
+}
+
+.wallpaper-warning {
+  padding: 15px;
+  background-color: #fef3c7;
+  color: #92400e;
+  border-radius: 4px;
+  margin-top: 15px;
+  border-left: 4px solid #f59e0b;
 }
 
 .wallpaper-preview {

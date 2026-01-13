@@ -10,6 +10,7 @@ function WallpaperGenerator({ plansWithMatches, onClose }) {
   const [generating, setGenerating] = useState(false)
   const [previewUrl, setPreviewUrl] = useState(null)
   const [error, setError] = useState(null)
+  const [warning, setWarning] = useState(null)
   const [backgroundColor, setBackgroundColor] = useState('#FFFFFF')
 
   /**
@@ -19,6 +20,7 @@ function WallpaperGenerator({ plansWithMatches, onClose }) {
     try {
       setGenerating(true)
       setError(null)
+      setWarning(null)
       setPreviewUrl(null)
 
       // 現地観戦のみフィルタリング
@@ -29,7 +31,13 @@ function WallpaperGenerator({ plansWithMatches, onClose }) {
         return
       }
 
-      // 画像を生成
+      // 39試合を超えている場合、警告を表示（画像生成前にチェック）
+      const MAX_MATCHES = 39
+      if (venuePlans.length > MAX_MATCHES) {
+        setWarning(`39試合を超える観戦予定があります（全${venuePlans.length}試合）。最初の39試合のみ表示します。`)
+      }
+
+      // 画像を生成（警告があっても続行）
       const blob = await generateWallpaperImage(venuePlans, backgroundColor)
       const url = URL.createObjectURL(blob)
       setPreviewUrl(url)
@@ -69,7 +77,14 @@ function WallpaperGenerator({ plansWithMatches, onClose }) {
     <div className="wallpaper-modal-overlay" onClick={handleClose}>
       <div className="wallpaper-modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="wallpaper-modal-header">
-          <h3>待受画面画像生成</h3>
+          <div className="wallpaper-modal-title-section">
+            <h3>待受画面画像生成</h3>
+            {warning && (
+              <div className="wallpaper-warning-inline">
+                {warning}
+              </div>
+            )}
+          </div>
           <button className="wallpaper-modal-close" onClick={handleClose}>×</button>
         </div>
 
@@ -120,6 +135,7 @@ function WallpaperGenerator({ plansWithMatches, onClose }) {
                   onClick={() => {
                     URL.revokeObjectURL(previewUrl)
                     setPreviewUrl(null)
+                    setWarning(null)
                   }}
                   type="button"
                 >
