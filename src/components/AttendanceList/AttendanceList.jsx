@@ -5,6 +5,54 @@ import { getAllAttendancePlansWithMatches, deleteAttendancePlan } from '../../se
 import WallpaperGenerator from '../common/WallpaperGenerator.jsx'
 import './AttendanceList.css'
 
+// 色マスタを読み込む
+let colorMaster = null
+const DEFAULT_TEXT_COLOR = '#2c3e50'
+
+/**
+ * 色マスタを読み込む
+ * @returns {Promise<Object>} 色マスタオブジェクト
+ */
+async function loadColorMaster() {
+  if (colorMaster) {
+    return colorMaster
+  }
+
+  try {
+    const basePath = import.meta.env.BASE_URL
+    const colorMasterPath = `${basePath}data/color-master.json`
+    const response = await fetch(colorMasterPath)
+    if (!response.ok) {
+      console.warn('[AttendanceList] 色マスタの読み込みに失敗しました')
+      return null
+    }
+    const data = await response.json()
+    colorMaster = data
+    return data
+  } catch (error) {
+    console.error('[AttendanceList] 色マスタ読み込みエラー:', error)
+    return null
+  }
+}
+
+/**
+ * チーム名から文字色を取得
+ * @param {string} teamName - チーム名
+ * @returns {string} 文字色（HEX形式）
+ */
+function getTeamTextColor(teamName) {
+  if (!colorMaster || !teamName) {
+    return DEFAULT_TEXT_COLOR
+  }
+
+  const teamColors = colorMaster.colors[teamName]
+  if (!teamColors) {
+    return DEFAULT_TEXT_COLOR
+  }
+
+  return teamColors.text || DEFAULT_TEXT_COLOR
+}
+
 /**
  * AttendanceListコンポーネント
  * 観戦予定の一覧を表示
@@ -21,6 +69,8 @@ function AttendanceList() {
   // 観戦予定を読み込む
   useEffect(() => {
     loadAttendancePlans()
+    // 色マスタを読み込む
+    loadColorMaster()
   }, [])
 
   /**
@@ -224,9 +274,19 @@ function AttendanceList() {
 
                 {/* 中央: 両クラブ */}
                 <div className="attendance-teams">
-                  <span className="home-team">{match.homeTeam}</span>
+                  <span 
+                    className="home-team"
+                    style={{ color: getTeamTextColor(match.homeTeam) }}
+                  >
+                    {match.homeTeam}
+                  </span>
                   <span className="vs">vs</span>
-                  <span className="away-team">{match.awayTeam}</span>
+                  <span 
+                    className="away-team"
+                    style={{ color: getTeamTextColor(match.awayTeam) }}
+                  >
+                    {match.awayTeam}
+                  </span>
                 </div>
 
                 <div className="attendance-details">

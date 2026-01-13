@@ -38,12 +38,13 @@ const CARD_MARGIN = 10
 
 // 配置
 const COLUMNS = 3
-const ROWS = 17
 const MAX_MATCHES = 51
+// 最大行数（51枚の場合: 3×17=51）
+const MAX_ROWS = 17
 
-// カードサイズ
+// カードサイズ（最大行数に基づいて計算）
 const CARD_WIDTH = Math.floor((CANVAS_WIDTH - MARGIN * 2 - CARD_MARGIN * 2) / COLUMNS)
-const CARD_HEIGHT = Math.floor((CANVAS_HEIGHT - MARGIN * 2 - CARD_MARGIN * (ROWS - 1)) / ROWS)
+const CARD_HEIGHT = Math.floor((CANVAS_HEIGHT - MARGIN * 2 - CARD_MARGIN * (MAX_ROWS - 1)) / MAX_ROWS)
 
 // JSONファイルの元のサイズ
 const ORIGINAL_CANVAS_WIDTH = cardLayoutSpec.canvas.width // 659
@@ -56,18 +57,65 @@ const SCALE_Y = CARD_HEIGHT / ORIGINAL_CANVAS_HEIGHT // 135/300 = 0.45
 // フォント設定
 const FONT_FAMILY = 'Noto Sans JP'
 
-// カテゴリ別の色設定（淡い色合い）
+// カテゴリ別の色設定（淡い色合い、明度を上げ彩度を下げた背景）
 const CATEGORY_COLORS = {
   venue: {
-    gradientStart: '#E3F2FD', // 淡い青
-    gradientEnd: '#BBDEFB',   // より淡い青
-    textColor: '#1565C0'      // 青系の濃い色
+    gradientStart: '#F0F7FC', // より明るく、彩度を下げた淡い青
+    gradientEnd: '#E8F2F8',   // より明るく、彩度を下げたより淡い青
+    textColor: '#1565C0'      // 青系の濃い色（デフォルト）
   },
   broadcast: {
     gradientStart: '#E8F5E9', // 淡い緑
     gradientEnd: '#C8E6C9',   // より淡い緑
     textColor: '#2E7D32'       // 緑系の濃い色
   }
+}
+
+// 色マスタを読み込む
+let colorMaster = null
+
+/**
+ * 色マスタを読み込む
+ * @returns {Promise<Object>} 色マスタオブジェクト
+ */
+async function loadColorMaster() {
+  if (colorMaster) {
+    return colorMaster
+  }
+
+  try {
+    const basePath = import.meta.env.BASE_URL
+    const colorMasterPath = `${basePath}data/color-master.json`
+    const response = await fetch(colorMasterPath)
+    if (!response.ok) {
+      console.warn('[ImageExportService] 色マスタの読み込みに失敗しました')
+      return null
+    }
+    const data = await response.json()
+    colorMaster = data
+    return data
+  } catch (error) {
+    console.error('[ImageExportService] 色マスタ読み込みエラー:', error)
+    return null
+  }
+}
+
+/**
+ * チーム名から文字色を取得
+ * @param {string} teamName - チーム名
+ * @returns {string} 文字色（HEX形式）
+ */
+function getTeamTextColor(teamName) {
+  if (!colorMaster || !teamName) {
+    return null // nullの場合はデフォルト色を使用
+  }
+
+  const teamColors = colorMaster.colors[teamName]
+  if (!teamColors) {
+    return null
+  }
+
+  return teamColors.text || null
 }
 
 /**
@@ -79,6 +127,9 @@ const CATEGORY_COLORS = {
 export async function generateWallpaperImage(plansWithMatches, backgroundColor = '#FFFFFF') {
   // フォントの読み込みを待つ（Noto Sans JP）
   await waitForFonts(FONT_FAMILY, ['400', '500', '700'])
+
+  // 色マスタを読み込む
+  await loadColorMaster()
 
   // 現地観戦のみフィルタリング（初回実装）
   const filteredPlans = plansWithMatches.filter(({ plan }) => plan.category === 'venue')
@@ -97,13 +148,28 @@ export async function generateWallpaperImage(plansWithMatches, backgroundColor =
   ctx.fillStyle = backgroundColor
   ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
 
-  // カードを描画（列優先、縦方向）
+  // カードを描画（縦方向優先：左上から開始し、縦方向にカードを積んでいく）
+  // カード枚数に応じて行数を計算
+  const totalCards = matchesToRender.length
+  // 3n, 3n-1, 3n-2 のいずれかの形式で行数nを計算
+  const n = Math.ceil(totalCards / 3)  // 各列の行数
+
   matchesToRender.forEach(({ plan, match }, index) => {
-    const col = index % COLUMNS
-    const row = Math.floor(index / COLUMNS)
+    // 縦方向優先：各列に先に縦に並べ、次の列へ進む
+    // col=0に row=0 から row=n-1 まで（n枚）
+    // col=1に row=0 から row=n-1 まで（n枚）
+    // col=2に row=0 から row=n-1 まで（n枚）
+    // 列は Math.floor(index / n)、行は index % n
+    const col = Math.floor(index / n)
+    const row = index % n
 
     const cardX = MARGIN + col * (CARD_WIDTH + CARD_MARGIN)
     const cardY = MARGIN + row * (CARD_HEIGHT + CARD_MARGIN)
+
+    // デバッグ用ログ（開発時のみ）
+    if (index < 9) {
+      console.log(`[Card Layout] index=${index}: col=${col}, row=${row}, x=${cardX}, y=${cardY}`)
+    }
 
     drawCard(ctx, cardX, cardY, plan, match)
   })
@@ -166,8 +232,22 @@ function drawCard(ctx, cardX, cardY, plan, match) {
     const fontWeight = element.fontWeight === 700 ? '700' : element.fontWeight === 500 ? '500' : '400'
     ctx.save()
     ctx.font = `${fontWeight} ${scaledFontSize}px ${FONT_FAMILY}`
-    // 背景色に合わせた文字色を使用
-    ctx.fillStyle = colors.textColor
+    
+    // HomeとAwayの場合は、それぞれのチームのtextカラーを使用
+    let textColor = colors.textColor // デフォルト色
+    if (element.id === 'home') {
+      const homeTextColor = getTeamTextColor(match.homeTeam)
+      if (homeTextColor) {
+        textColor = homeTextColor
+      }
+    } else if (element.id === 'away') {
+      const awayTextColor = getTeamTextColor(match.awayTeam)
+      if (awayTextColor) {
+        textColor = awayTextColor
+      }
+    }
+    
+    ctx.fillStyle = textColor
     ctx.textAlign = 'left'
     ctx.textBaseline = 'top'
 
