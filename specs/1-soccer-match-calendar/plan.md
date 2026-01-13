@@ -49,6 +49,26 @@ specs/1-soccer-match-calendar/
 └── tasks.md             # Phase 2 output (/speckit.tasks command - NOT created by /speckit.plan)
 ```
 
+### Development Documentation (repository root)
+
+```text
+docs/                    # 開発・セットアップ・デプロイ関連ドキュメント
+├── README.md            # ドキュメントディレクトリの説明
+├── SETUP_GIT.md         # Gitリポジトリの初期設定手順
+├── SETUP_GITHUB.md      # GitHubリポジトリの設定手順
+├── COMMIT_README.md     # 初回コミット手順
+├── DEPLOY.md            # GitHub Pagesへのデプロイ手順
+├── PWA_FIX.md           # PWAのbaseパス修正について
+├── HASHROUTER_CHANGE.md # BrowserRouterからHashRouterへの変更について
+├── RELEASE_NOTES_v1.0.0.md  # Version 1.0.0のリリースノート
+└── CHECK_FILES.md       # ファイルサイズチェック結果
+```
+
+**Documentation Guidelines**: 
+- 開発中に作成されるセットアップ、デプロイ、リリース、技術的な変更記録などのドキュメントは、すべて`docs/`ディレクトリに保存する
+- プロジェクトルートの`README.md`、`CHANGELOG.md`、`VERSION.md`は標準的なドキュメントとしてルートに残す
+- 機能仕様やデータモデルなどの設計ドキュメントは`specs/`ディレクトリに保存する
+
 ### Source Code (repository root)
 
 ```text
