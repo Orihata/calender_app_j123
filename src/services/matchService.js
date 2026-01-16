@@ -165,6 +165,30 @@ export async function deleteMatch(id) {
 }
 
 /**
+ * 複数の試合予定を一括削除
+ * @param {Array<string>} ids - 削除する試合予定のID配列
+ * @returns {Promise<{success: number, errors: Array<Object>}>} 削除結果
+ */
+export async function deleteMatches(ids) {
+  const success = []
+  const errors = []
+
+  for (const id of ids) {
+    try {
+      await deleteMatch(id)
+      success.push(id)
+    } catch (error) {
+      errors.push({
+        id,
+        error: error.message
+      })
+    }
+  }
+
+  return { success: success.length, errors }
+}
+
+/**
  * すべての試合予定を削除
  * @returns {Promise<void>}
  */

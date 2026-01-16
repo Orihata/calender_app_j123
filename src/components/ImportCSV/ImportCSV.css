@@ -8,6 +8,156 @@
   color: #2c3e50;
 }
 
+/* トップページ：選択ボタン */
+.data-edit-top {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.top-button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-large {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.btn-small {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: #545b62;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: #c82333;
+}
+
+/* モーダル共通スタイル */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 8px;
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #dee2e6;
+  flex-shrink: 0;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 1.25rem;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #6c757d;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.modal-close:hover {
+  background-color: #f8f9fa;
+  color: #2c3e50;
+}
+
+.modal-body {
+  padding: 1.5rem;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #dee2e6;
+  flex-shrink: 0;
+}
+
+/* CSVモーダル */
+.csv-modal-content {
+  max-width: 700px;
+}
+
 .import-csv-form {
   background-color: white;
   padding: 2rem;
@@ -54,38 +204,7 @@
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
-}
-
-.btn {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.btn-primary {
-  background-color: #007bff;
-  color: white;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background-color: #0056b3;
-}
-
-.btn-secondary {
-  background-color: #6c757d;
-  color: white;
-}
-
-.btn-secondary:hover:not(:disabled) {
-  background-color: #545b62;
+  margin-bottom: 1rem;
 }
 
 .error-message {
@@ -98,15 +217,22 @@
 }
 
 .import-result {
-  background-color: white;
-  padding: 2rem;
+  background-color: #f8f9fa;
+  padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 1rem;
 }
 
-.import-result h3 {
+.import-result h4 {
   margin-bottom: 1rem;
   color: #2c3e50;
+  font-size: 1.1rem;
+}
+
+.import-result h5 {
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+  font-size: 1rem;
 }
 
 .result-summary {
@@ -149,13 +275,6 @@
   margin-top: 1.5rem;
 }
 
-.error-list h4,
-.warning-list h4,
-.save-error-list h4 {
-  margin-bottom: 0.5rem;
-  color: #2c3e50;
-}
-
 .error-list ul,
 .warning-list ul,
 .save-error-list ul {
@@ -185,66 +304,8 @@
 }
 
 /* 手動追加モーダル */
-.manual-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 1rem;
-}
-
 .manual-modal-content {
-  background-color: white;
-  border-radius: 8px;
   max-width: 600px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  display: flex;
-  flex-direction: column;
-}
-
-.manual-modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid #dee2e6;
-  flex-shrink: 0;
-}
-
-.manual-modal-header h3 {
-  margin: 0;
-  color: #2c3e50;
-  font-size: 1.25rem;
-}
-
-.manual-modal-close {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: #6c757d;
-  cursor: pointer;
-  padding: 0;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
-.manual-modal-close:hover {
-  background-color: #f8f9fa;
-  color: #2c3e50;
 }
 
 .manual-form {
@@ -322,17 +383,216 @@
   border: 1px solid #c3e6cb;
 }
 
-.manual-modal-footer {
+/* 削除モーダル */
+.delete-modal-content {
+  max-width: 700px;
+}
+
+.empty-message {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6c757d;
+}
+
+.empty-message p {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.delete-controls {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.selected-count {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.match-list-container {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+}
+
+/* 削除画面専用の一行表示スタイル - 他のコンポーネントとの競合を避けるため専用クラス名を使用 */
+.match-delete-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.delete-list-item {
+  margin-bottom: 0.5rem;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  transition: background-color 0.2s, border-color 0.2s;
+  background-color: white;
+}
+
+.delete-list-item:hover {
+  background-color: #f8f9fa;
+}
+
+.delete-list-item.selected {
+  background-color: #e7f3ff;
+  border-color: #007bff;
+}
+
+/* 削除モーダルの基本スタイル */
+.delete-modal-content {
+  max-width: 800px;
+}
+
+.delete-item-row {
+  display: flex !important;
+  align-items: center !important;
+  padding: 0.75rem 1rem !important;
+  gap: 0.75rem !important;
+  flex-wrap: nowrap !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.delete-checkbox-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  cursor: pointer !important;
+  flex-shrink: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.delete-checkbox-input {
+  width: 20px !important;
+  height: 20px !important;
+  cursor: pointer !important;
+  flex-shrink: 0 !important;
+  margin: 0 !important;
+}
+
+.delete-match-content {
+  flex: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  flex-wrap: nowrap !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+.delete-match-date {
+  font-weight: 600 !important;
+  color: #2c3e50 !important;
+  font-size: 0.95rem !important;
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+  min-width: 100px !important;
+}
+
+.delete-match-time {
+  color: #6c757d !important;
+  font-size: 0.9rem !important;
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+  min-width: 55px !important;
+}
+
+.delete-match-teams {
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  color: #2c3e50 !important;
+  flex: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  min-width: 0 !important;
+}
+
+.delete-detail-btn {
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 50% !important;
+  border: 1.5px solid #007bff !important;
+  background-color: white !important;
+  color: #007bff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: all 0.2s !important;
+  padding: 0 !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  flex-shrink: 0 !important;
+  margin: 0 !important;
+}
+
+.delete-detail-btn:hover {
+  background-color: #007bff !important;
+  color: white !important;
+}
+
+.delete-detail-icon {
+  font-style: normal !important;
+  font-family: Arial, sans-serif !important;
+}
+
+/* 詳細情報モーダル */
+.detail-modal-content {
+  max-width: 500px;
+}
+
+.detail-info {
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
-  padding: 1rem 1.5rem;
-  border-top: 1px solid #dee2e6;
+}
+
+.detail-row {
+  display: flex;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #2c3e50;
+  min-width: 100px;
   flex-shrink: 0;
+}
+
+.detail-value {
+  color: #2c3e50;
+  flex: 1;
+  word-break: break-word;
 }
 
 /* モバイル対応 */
 @media (max-width: 768px) {
+  .data-edit-top {
+    padding: 1rem;
+  }
+
+  .top-button-group {
+    gap: 0.75rem;
+  }
+
+  .btn-large {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+  }
+
   .import-csv-form {
     padding: 1rem;
   }
@@ -349,23 +609,107 @@
     flex-direction: column;
   }
 
-  .manual-modal-content {
+  /* 削除モーダル以外のモーダルは従来通り */
+  .modal-content:not(.delete-modal-content) {
     max-width: 100%;
     max-height: 95vh;
     margin: 0.5rem;
   }
+  
+  /* 削除モーダルは全画面表示（上記の@mediaで定義） */
 
-  .manual-modal-header,
-  .manual-form-body,
-  .manual-modal-footer {
+  .modal-header,
+  .modal-body,
+  .modal-footer {
     padding: 1rem;
   }
 
-  .manual-modal-footer {
+  .modal-footer {
     flex-direction: column;
   }
 
-  .manual-modal-footer .btn {
+  .modal-footer .btn {
     width: 100%;
+  }
+
+  .delete-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  /* 削除モーダルを全画面表示にする（モバイルで一行表示を維持するため） */
+  .delete-modal-content {
+    max-width: 100% !important;
+    max-height: 100vh !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+  
+  .delete-modal-content .modal-header,
+  .delete-modal-content .modal-body,
+  .delete-modal-content .modal-footer {
+    padding: 1rem !important;
+  }
+  
+  .delete-modal-content .modal-body {
+    padding-bottom: 90px !important; /* フッターの高さを考慮 */
+    flex: 1 !important;
+    overflow-y: auto !important;
+  }
+  
+  .delete-modal-content .modal-footer {
+    position: sticky !important;
+    bottom: 0 !important;
+    background-color: white !important;
+    border-top: 2px solid #dee2e6 !important;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1) !important;
+    z-index: 10 !important;
+  }
+
+  .match-list-container {
+    max-height: calc(100vh - 250px) !important; /* 全画面表示時の高さ調整 */
+  }
+
+  /* 削除画面では一行表示を維持（全画面モーダルなので横幅が確保できる） */
+  .delete-item-row {
+    padding: 0.625rem 0.75rem !important;
+    gap: 0.5rem !important;
+  }
+
+  .delete-match-content {
+    gap: 0.5rem !important;
+    flex-wrap: nowrap !important; /* 一行表示を維持 */
+    flex-direction: row !important; /* 横並びを維持 */
+    align-items: center !important; /* 中央揃えを維持 */
+  }
+
+  .delete-match-date {
+    min-width: 85px !important; /* モバイルでも最小幅を確保 */
+    font-size: 0.85rem !important;
+  }
+
+  .delete-match-time {
+    min-width: 50px !important; /* モバイルでも最小幅を確保 */
+    font-size: 0.8rem !important;
+  }
+
+  .delete-match-teams {
+    font-size: 0.9rem !important;
+    white-space: nowrap !important; /* 一行表示を維持 */
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    min-width: 0 !important;
+    flex: 1 !important;
+  }
+
+  .detail-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .detail-label {
+    min-width: auto;
   }
 }

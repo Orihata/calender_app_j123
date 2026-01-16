@@ -127,7 +127,7 @@ function Nav() {
           className={location.pathname === '/import' ? 'active' : ''}
           onClick={closeMenu}
         >
-          CSVインポート
+          データ編集
         </Link>
         <Link 
           to="/attendance" 
