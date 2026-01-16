@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { generateWallpaperImage } from '../../services/imageExportService.js'
 import './WallpaperGenerator.css'
 
@@ -13,6 +13,49 @@ function WallpaperGenerator({ plansWithMatches, onClose }) {
   const [warning, setWarning] = useState(null)
   const [backgroundColor, setBackgroundColor] = useState('#FFFFFF')
   const [coloringPattern, setColoringPattern] = useState('current')
+  const [layoutType, setLayoutType] = useState('card')
+  const [showColorModal, setShowColorModal] = useState(false)
+
+  // 背景色の選択肢（ごくごく淡い7色）
+  const backgroundColors = [
+    { value: '#FFFFFF', name: '白' },
+    { value: '#F0F7FC', name: '淡い青' },
+    { value: '#FFF0F5', name: '淡いピンク' },
+    { value: '#F0FFF0', name: '淡いグリーン' },
+    { value: '#FFFFF0', name: '淡いイエロー' },
+    { value: '#F5F0FF', name: '淡いパープル' },
+    { value: '#F5F5F5', name: '淡いグレー' }
+  ]
+
+  // 現在選択されている色の名前を取得
+  const getCurrentColorName = () => {
+    const color = backgroundColors.find(c => c.value === backgroundColor)
+    return color ? color.name : '白'
+  }
+
+  // 色を選択してモーダルを閉じる
+  const handleColorSelect = (colorValue) => {
+    setBackgroundColor(colorValue)
+    setShowColorModal(false)
+  }
+
+  // 色選択モーダルの外側をクリックしたときに閉じる
+  const colorModalRef = useRef(null)
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (colorModalRef.current && !colorModalRef.current.contains(event.target)) {
+        setShowColorModal(false)
+      }
+    }
+
+    if (showColorModal) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showColorModal])
 
   /**
    * 画像を生成
@@ -32,14 +75,14 @@ function WallpaperGenerator({ plansWithMatches, onClose }) {
         return
       }
 
-      // 39試合を超えている場合、警告を表示（画像生成前にチェック）
-      const MAX_MATCHES = 39
+      // レイアウトタイプに応じた最大試合数をチェック
+      const MAX_MATCHES = layoutType === 'stick' ? 39 : 39
       if (venuePlans.length > MAX_MATCHES) {
-        setWarning(`39試合を超える観戦予定があります（全${venuePlans.length}試合）。最初の39試合のみ表示します。`)
+        setWarning(`${MAX_MATCHES}試合を超える観戦予定があります（全${venuePlans.length}試合）。最初の${MAX_MATCHES}試合のみ表示します。`)
       }
 
       // 画像を生成（警告があっても続行）
-      const blob = await generateWallpaperImage(venuePlans, backgroundColor, coloringPattern)
+      const blob = await generateWallpaperImage(venuePlans, backgroundColor, coloringPattern, layoutType)
       const url = URL.createObjectURL(blob)
       setPreviewUrl(url)
     } catch (err) {
@@ -92,19 +135,49 @@ function WallpaperGenerator({ plansWithMatches, onClose }) {
         <div className="wallpaper-modal-body">
           {!previewUrl && (
             <div className="wallpaper-controls">
-              <div className="wallpaper-color-picker">
+              <div className="wallpaper-background-selector">
                 <label htmlFor="bg-color">背景色:</label>
-                <input
-                  type="color"
-                  id="bg-color"
-                  value={backgroundColor}
-                  onChange={(e) => setBackgroundColor(e.target.value)}
-                />
-                <span>{backgroundColor}</span>
+                <div className="wallpaper-color-selector-wrapper" ref={colorModalRef}>
+                  <button
+                    type="button"
+                    className="wallpaper-color-preview"
+                    style={{ backgroundColor: backgroundColor }}
+                    onClick={() => setShowColorModal(!showColorModal)}
+                    title={getCurrentColorName()}
+                  />
+                  {showColorModal && (
+                    <div className="wallpaper-color-modal" onClick={(e) => e.stopPropagation()}>
+                      <div className="wallpaper-color-options">
+                        {backgroundColors.map((color) => (
+                          <button
+                            key={color.value}
+                            type="button"
+                            className={`wallpaper-color-option ${backgroundColor === color.value ? 'active' : ''}`}
+                            style={{ backgroundColor: color.value }}
+                            onClick={() => handleColorSelect(color.value)}
+                            title={color.name}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="wallpaper-pattern-selector">
-                <label htmlFor="coloring-pattern">カラーリングパターン:</label>
+                <label htmlFor="layout-type">レイアウトタイプ:</label>
+                <select
+                  id="layout-type"
+                  value={layoutType}
+                  onChange={(e) => setLayoutType(e.target.value)}
+                >
+                  <option value="card">カード</option>
+                  <option value="stick">スティック</option>
+                </select>
+              </div>
+
+              <div className="wallpaper-pattern-selector">
+                <label htmlFor="coloring-pattern">カラーリング:</label>
                 <select
                   id="coloring-pattern"
                   value={coloringPattern}

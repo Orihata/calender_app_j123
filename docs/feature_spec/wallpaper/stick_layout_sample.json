@@ -1,0 +1,81 @@
+{
+    "canvas": {
+        "width": 1000,
+        "height": 45,
+        "background": "#ffffff"
+    },
+    "elements": [
+        {
+            "id": "date",
+            "type": "text",
+            "content": "12/16",
+            "x": 25,
+            "y": 5,
+            "fontSize": 36,
+            "fontWeight": 500
+        },
+        {
+            "id": "dow",
+            "type": "text",
+            "content": "金",
+            "x": 120,
+            "y": 15,
+            "fontSize": 24,
+            "fontWeight": 400
+        },
+        {
+            "id": "home",
+            "type": "text",
+            "content": "横浜FM",
+            "x": 180,
+            "y": 10,
+            "fontSize": 32,
+            "fontWeight": 700
+        },
+        {
+            "id": "away",
+            "type": "text",
+            "content": "町田",
+            "x": 300,
+            "y": 10,
+            "fontSize": 32,
+            "fontWeight": 400
+        },
+        {
+            "id": "kickoff",
+            "type": "text",
+            "content": "19:00",
+            "x": 400,
+            "y": 15,
+            "fontSize": 28,
+            "fontWeight": 400
+        },
+        {
+            "id": "venue",
+            "type": "text",
+            "content": "日産ス",
+            "x": 500,
+            "y": 15,
+            "fontSize": 24,
+            "fontWeight": 500
+        },
+        {
+            "id": "competition",
+            "type": "text",
+            "content": "EAST",
+            "x": 650,
+            "y": 15,
+            "fontSize": 20,
+            "fontWeight": 500
+        },
+        {
+            "id": "round",
+            "type": "text",
+            "content": "第10節",
+            "x": 790,
+            "y": 15,
+            "fontSize": 20,
+            "fontWeight": 500
+        }
+    ]
+}
