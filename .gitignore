@@ -48,3 +48,4 @@ coverage
 *.tar.gz
 *.tar.bz2
 amazon-q.deb
+docs/calender_app_j123.code-workspace

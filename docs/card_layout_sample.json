@@ -18,7 +18,7 @@
             "id": "round",
             "type": "text",
             "content": "第10節",
-            "x": 140,
+            "x": 190,
             "y": 35,
             "fontSize": 28,
             "fontWeight": 500
@@ -28,7 +28,7 @@
             "type": "text",
             "content": "12/16",
             "x": 30,
-            "y": 85,
+            "y": 75,
             "fontSize": 110,
             "fontWeight": 500
         },
