@@ -67,12 +67,18 @@ function AttendanceList() {
   const [showWallpaperGenerator, setShowWallpaperGenerator] = useState(false) // 画像生成モーダル
   const [memoStates, setMemoStates] = useState({}) // { [planId]: memoText }
   const [savingMemo, setSavingMemo] = useState({}) // { [planId]: boolean }
+  const [colorMasterLoaded, setColorMasterLoaded] = useState(false) // 色マスタ読み込み完了フラグ
 
   // 観戦予定を読み込む
   useEffect(() => {
-    loadAttendancePlans()
-    // 色マスタを読み込む
-    loadColorMaster()
+    const initialize = async () => {
+      // 色マスタを先に読み込む（完了を待つ）
+      await loadColorMaster()
+      setColorMasterLoaded(true)
+      // 観戦予定を読み込む
+      await loadAttendancePlans()
+    }
+    initialize()
   }, [])
 
   /**
@@ -166,6 +172,39 @@ function AttendanceList() {
   }
 
   /**
+   * 応援クラブを変更
+   */
+  const handleSupportingTeamChange = async (planId, teamType) => {
+    // スクロール位置を保存
+    const scrollPosition = window.scrollY || window.pageYOffset || document.documentElement.scrollTop
+    
+    try {
+      const plan = attendancePlans.find(({ plan }) => plan.id === planId)?.plan
+      if (!plan) return
+
+      // 現在の応援クラブを取得
+      const currentSupportingTeam = plan.supportingTeam
+
+      // 同じチームを選択した場合は選択解除（中立）、そうでなければ切り替え
+      const newSupportingTeam = currentSupportingTeam === teamType ? null : teamType
+
+      // 更新
+      await updateAttendancePlan(planId, { supportingTeam: newSupportingTeam })
+      
+      // 一覧を再読み込み
+      await loadAttendancePlans()
+      
+      // スクロール位置を復元
+      requestAnimationFrame(() => {
+        window.scrollTo(0, scrollPosition)
+      })
+    } catch (error) {
+      console.error('応援クラブの更新エラー:', error)
+      alert(`応援クラブの更新に失敗しました: ${error.message}`)
+    }
+  }
+
+  /**
    * カテゴリボタンのトグル
    */
   const toggleCategory = (category) => {
@@ -210,10 +249,12 @@ function AttendanceList() {
 
   return (
     <div className="attendance-list">
-      <h2>観戦予定一覧</h2>
-      
-      {/* フィルターと編集モードトグル */}
-      <div className="attendance-controls">
+      {/* 見出しとコントロールを固定表示 */}
+      <div className="attendance-header-sticky">
+        <h2>観戦予定一覧</h2>
+        
+        {/* フィルターと編集モードトグル */}
+        <div className="attendance-controls">
         <div className="attendance-filters">
           <button
             className={`category-button ${selectedCategories.includes('venue') ? 'active venue' : ''}`}
@@ -252,6 +293,7 @@ function AttendanceList() {
             {isEditMode ? '編集' : '閲覧'}
           </button>
         </div>
+      </div>
       </div>
 
       <div className="attendance-count">
@@ -324,19 +366,39 @@ function AttendanceList() {
 
                 {/* 中央: 両クラブ */}
                 <div className="attendance-teams">
-                  <span 
-                    className="home-team"
-                    style={{ color: getTeamTextColor(match.homeTeam) }}
+                  <button
+                    className={`home-team-button ${plan.supportingTeam === 'home' ? 'selected' : ''}`}
+                    style={{ 
+                      color: plan.supportingTeam === 'home' ? '#fff' : getTeamTextColor(match.homeTeam),
+                      backgroundColor: plan.supportingTeam === 'home' ? getTeamTextColor(match.homeTeam) : 'transparent'
+                    }}
+                    onClick={isEditMode ? (e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      handleSupportingTeamChange(plan.id, 'home')
+                    } : undefined}
+                    disabled={!isEditMode}
+                    type="button"
                   >
                     {match.homeTeam}
-                  </span>
+                  </button>
                   <span className="vs">vs</span>
-                  <span 
-                    className="away-team"
-                    style={{ color: getTeamTextColor(match.awayTeam) }}
+                  <button
+                    className={`away-team-button ${plan.supportingTeam === 'away' ? 'selected' : ''}`}
+                    style={{ 
+                      color: plan.supportingTeam === 'away' ? '#fff' : getTeamTextColor(match.awayTeam),
+                      backgroundColor: plan.supportingTeam === 'away' ? getTeamTextColor(match.awayTeam) : 'transparent'
+                    }}
+                    onClick={isEditMode ? (e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      handleSupportingTeamChange(plan.id, 'away')
+                    } : undefined}
+                    disabled={!isEditMode}
+                    type="button"
                   >
                     {match.awayTeam}
-                  </span>
+                  </button>
                 </div>
 
                 <div className="attendance-details">

@@ -118,6 +118,7 @@ export async function createAttendancePlan(matchId, category = 'venue') {
  * @param {string} id - 観戦予定のID
  * @param {Object} updates - 更新するフィールド
  * @param {string|null} [updates.memo] - ひとことメモ
+ * @param {string|null} [updates.supportingTeam] - 応援クラブ ('home' | 'away' | null)
  * @returns {Promise<AttendancePlan>} 更新された観戦予定
  */
 export async function updateAttendancePlan(id, updates) {
@@ -133,6 +134,14 @@ export async function updateAttendancePlan(id, updates) {
   // 更新フィールドを適用
   if (updates.memo !== undefined) {
     plan.memo = updates.memo && updates.memo.trim() ? updates.memo.trim() : null
+  }
+  
+  if (updates.supportingTeam !== undefined) {
+    // supportingTeamは 'home' | 'away' | null のみ許可
+    if (updates.supportingTeam !== null && updates.supportingTeam !== 'home' && updates.supportingTeam !== 'away') {
+      throw new Error('supportingTeamは "home"、"away"、または null である必要があります')
+    }
+    plan.supportingTeam = updates.supportingTeam
   }
   
   // updatedAtを更新

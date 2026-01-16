@@ -11,6 +11,7 @@ export class AttendancePlan {
    * @param {string} data.matchId - 関連する試合予定のID（Match.idへの参照）
    * @param {string} data.category - カテゴリ ('venue' | 'broadcast')
    * @param {string|null} [data.memo] - ひとことメモ（オプション）
+   * @param {string|null} [data.supportingTeam] - 応援クラブ ('home' | 'away' | null)
    * @param {string} data.createdAt - 作成日時（ISO 8601形式）
    * @param {string} data.updatedAt - 更新日時（ISO 8601形式）
    */
@@ -19,6 +20,7 @@ export class AttendancePlan {
     this.matchId = data.matchId
     this.category = data.category || 'venue' // デフォルトは現地観戦予定
     this.memo = data.memo || null // ひとことメモ（追加）
+    this.supportingTeam = data.supportingTeam || null // 応援クラブ（追加）
     this.createdAt = data.createdAt
     this.updatedAt = data.updatedAt
   }
@@ -33,6 +35,7 @@ export class AttendancePlan {
       matchId: this.matchId,
       category: this.category,
       memo: this.memo,
+      supportingTeam: this.supportingTeam,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     }
@@ -54,7 +57,8 @@ export class AttendancePlan {
   static fromJSON(json) {
     return new AttendancePlan({
       ...json,
-      memo: json.memo || null // 既存データとの互換性を確保
+      memo: json.memo || null, // 既存データとの互換性を確保
+      supportingTeam: json.supportingTeam || null // 既存データとの互換性を確保
     })
   }
 }

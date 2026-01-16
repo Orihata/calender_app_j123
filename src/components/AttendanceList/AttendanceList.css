@@ -8,12 +8,23 @@
   color: #2c3e50;
 }
 
+.attendance-header-sticky {
+  position: sticky;
+  top: 56px; /* ヘッダーの高さより小さくして潜り込ませる */
+  background-color: white;
+  z-index: 99; /* ヘッダー（z-index: 1000）より下に配置 */
+  padding: 1rem 2rem;
+  margin: -4px -2rem 1rem -2rem; /* 上に4px伸ばしてヘッダーと重ねる */
+  padding-top: calc(1rem + 4px); /* 上側のパディングを増やす */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
 .attendance-controls {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   flex-wrap: wrap;
 }
 
@@ -154,6 +165,41 @@
   font-weight: 600;
   font-size: 1.2rem;
   color: #2c3e50;
+}
+
+.home-team-button,
+.away-team-button {
+  font-weight: 600;
+  font-size: 1.2rem;
+  border: none;
+  background: transparent;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.home-team-button:hover:not(:disabled),
+.away-team-button:hover:not(:disabled) {
+  opacity: 0.8;
+  transform: translateY(-1px);
+}
+
+.home-team-button:active:not(:disabled),
+.away-team-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.home-team-button:disabled,
+.away-team-button:disabled {
+  cursor: default;
+}
+
+.home-team-button.selected,
+.away-team-button.selected {
+  /* 選択時は文字色と背景色が反転される（インラインスタイルで指定） */
+  border-radius: 4px;
 }
 
 .vs {
@@ -465,6 +511,11 @@
 
 /* モバイル対応 */
 @media (max-width: 768px) {
+  .attendance-header-sticky {
+    padding: 1rem;
+    margin: 0 -1rem 1rem -1rem;
+  }
+
   .attendance-item {
     padding: 1rem;
   }
