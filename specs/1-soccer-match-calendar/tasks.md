@@ -3,7 +3,11 @@
 **Feature**: サッカー試合予定カレンダーアプリケーション  
 **Branch**: `1-soccer-match-calendar`  
 **Date**: 2026-01-09  
-**Status**: Draft
+**Updated**: 2026-01-17  
+**Status**: Active  
+**Current Version**: 1.1.10
+
+**注意**: 実装済み機能の詳細なタスク定義は、`docs/feature_spec/` 内の各機能仕様書と `docs/TASKS_v1.1.0.md` を参照してください。
 
 ## 概要
 
@@ -13,11 +17,16 @@
 
 ## タスク統計
 
-- **総タスク数**: 45
-- **User Story 1 (P1)**: 18タスク
-- **User Story 2 (P2)**: 12タスク
-- **User Story 3 (P3)**: 8タスク
-- **Setup & Foundational**: 7タスク
+- **総タスク数**: 45（初期計画）+ 実装済みタスク
+- **User Story 1 (P1)**: 18タスク ✅ 完了
+- **User Story 2 (P2)**: 12タスク ✅ 完了
+- **User Story 3 (P3)**: 8タスク ✅ 完了
+- **User Story 4 (P2)**: 画像出力機能 ✅ 完了（Version 1.1.0）
+- **User Story 5 (P2)**: ひとことメモ機能 ✅ 完了（Version 1.1.0/1.1.2）
+- **User Story 6 (P3)**: 手動追加機能 ✅ 完了（Version 1.1.3）
+- **User Story 7 (P3)**: 試合予定削除機能 ✅ 完了（Version 1.1.4）
+- **User Story 8 (P2)**: 応援クラブ機能 ✅ 完了（Version 1.1.5/1.1.6）
+- **Setup & Foundational**: 7タスク ✅ 完了
 
 ## 依存関係グラフ
 
@@ -174,7 +183,7 @@ CSVファイルをインポートし、カレンダー上で特定の日時に�
 
 ---
 
-## Phase 5: User Story 3 - ピックアップ試合の一覧出力 (Priority: P3)
+## Phase 5: User Story 3 - ピックアップ試合の一覧出力 (Priority: P3) ✅ 完了
 
 ### ストーリー目標
 ユーザーは観戦予定としてマークした試合（ピックアップした試合）のみを一覧として出力できる。
@@ -190,14 +199,105 @@ CSVファイルをインポートし、カレンダー上で特定の日時に�
 
 ### タスク
 
-- [ ] T045 [US3] Implement exportAttendancePlansToJSON method in AttendanceService in src/services/attendanceService.js
-- [ ] T046 [US3] Implement exportAttendancePlansToCSV method in AttendanceService in src/services/attendanceService.js
-- [ ] T047 [US3] Add "一覧出力" button to AttendanceList component in src/components/AttendanceList/AttendanceList.js
-- [ ] T048 [US3] Implement export format selection (JSON/CSV) UI in src/components/AttendanceList/AttendanceList.js
-- [ ] T049 [US3] Implement file download functionality for exported data in src/components/AttendanceList/AttendanceList.js
-- [ ] T050 [US3] Implement sorting by dateTime (chronological order) for exported data in src/services/attendanceService.js
-- [ ] T051 [US3] Handle empty attendance plans case (show message) in src/components/AttendanceList/AttendanceList.js
-- [ ] T052 [US3] Format exported data with match details (dateTime, homeTeam, awayTeam, venue, etc.) in src/services/attendanceService.js
+- [x] T045 [US3] Implement exportAttendancePlansToJSON method in AttendanceService in src/services/attendanceService.js ✅
+- [x] T046 [US3] Implement exportAttendancePlansToCSV method in AttendanceService in src/services/attendanceService.js ✅
+- [x] T047 [US3] Add "一覧出力" button to AttendanceList component in src/components/AttendanceList/AttendanceList.js ✅
+- [x] T048 [US3] Implement export format selection (JSON/CSV) UI in src/components/AttendanceList/AttendanceList.js ✅
+- [x] T049 [US3] Implement file download functionality for exported data in src/components/AttendanceList/AttendanceList.js ✅
+- [x] T050 [US3] Implement sorting by dateTime (chronological order) for exported data in src/services/attendanceService.js ✅
+- [x] T051 [US3] Handle empty attendance plans case (show message) in src/components/AttendanceList/AttendanceList.js ✅
+- [x] T052 [US3] Format exported data with match details (dateTime, homeTeam, awayTeam, venue, etc.) in src/services/attendanceService.js ✅
+
+---
+
+## Phase 6: User Story 4 - 待受画面画像出力機能 (Priority: P2) ✅ 完了
+
+### ストーリー目標
+ユーザーは観戦予定としてマークした試合を、携帯電話の待受画面用の画像として出力できる。
+
+### 実装タスク
+
+- [x] T065 [US4] 画像出力機能の実装（待受画面用） ✅
+  - Canvas APIを使用した画像生成
+  - 携帯の待受画面サイズ対応（1080x2400px、縦長、9:20）
+  - カード型レイアウト（3列×17行、最大51試合）
+  - 背景色選択機能
+  - `docs/feature_spec/wallpaper/card_layout_sample.json`をSSOTとして実装
+
+**詳細仕様**: `docs/feature_spec/wallpaper/WALLPAPER_SPEC_v1.2.0.md` を参照  
+**実装バージョン**: Version 1.1.0  
+**実装状況**: ✅ 実装完了
+
+---
+
+## Phase 7: User Story 5 - ひとことメモ機能 (Priority: P2) ✅ 完了
+
+### ストーリー目標
+ユーザーは観戦予定に対して「ひとことメモ」を追加でき、そのメモは待受画面画像に表示される。
+
+### 実装タスク
+
+- [x] T066 [US5] メモ機能の実装 ✅
+  - AttendancePlanモデルに`memo`フィールドを追加
+  - UIにメモ入力欄を追加（最大20文字、1行のみ）
+  - リアルタイム保存機能
+  - 待受画面画像へのメモ表示
+
+**詳細仕様**: `docs/feature_spec/MEMO_FEATURE_SPEC.md` を参照  
+**実装バージョン**: Version 1.1.0（Version 1.1.2で改善）  
+**実装状況**: ✅ 実装完了
+
+---
+
+## Phase 8: User Story 6 - 試合予定の手動追加機能 (Priority: P3) ✅ 完了
+
+### ストーリー目標
+ユーザーはCSVファイル以外にも、テキストボックスから手動で試合予定を追加できる。
+
+### 実装タスク
+
+- [x] T067 [US6] 手動追加機能の実装 ✅
+  - モーダルフォームによる試合予定入力
+  - CSVインポートと同じバリデーション処理
+  - モバイル端末での利用を想定
+
+**実装バージョン**: Version 1.1.3  
+**実装状況**: ✅ 実装完了
+
+---
+
+## Phase 9: User Story 7 - 試合予定の削除機能 (Priority: P3) ✅ 完了
+
+### ストーリー目標
+ユーザーは登録済みの試合予定を削除できる。削除時には関連する観戦予定も自動的に削除される。
+
+### 実装タスク
+
+- [x] T068 [US7] 試合予定削除機能の実装 ✅
+  - 複数ID一括削除関数`deleteMatches()`を追加
+  - 削除モーダルUIの実装
+  - 参照整合性の維持（関連する観戦予定も自動削除）
+
+**実装バージョン**: Version 1.1.4  
+**実装状況**: ✅ 実装完了
+
+---
+
+## Phase 10: User Story 8 - 応援クラブ機能 (Priority: P2) ✅ 完了
+
+### ストーリー目標
+ユーザーは観戦予定に対して、応援するクラブ（home/away）を選択できる。選択したクラブは待受画面画像に反映される。
+
+### 実装タスク
+
+- [x] T069 [US8] 応援クラブ機能の実装 ✅
+  - AttendancePlanモデルに`supportingTeam`フィールドを追加
+  - 編集モードでの応援クラブ選択UI
+  - トグル機能（再選択で解除）
+  - 待受画面画像への反映（太字表示、メモ欄の背景色変更）
+
+**実装バージョン**: Version 1.1.5（Version 1.1.6で画像出力に反映）  
+**実装状況**: ✅ 実装完了
 
 ---
 

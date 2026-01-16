@@ -6,7 +6,9 @@
 **更新日**: 2026-01-13  
 **ステータス**: ✅ 実装完了
 
-**重要**: カード内レイアウトの仕様は、**`docs/card_layout_sample.json`をSSOT（Single Source of Truth）**とします。  
+**参照**: 高レベル設計・全体構造については `specs/1-soccer-match-calendar/spec.md` のUser Story 4を参照してください。本ファイルは実装詳細仕様（SSOT）です。
+
+**重要**: カード内レイアウトの仕様は、**`docs/feature_spec/wallpaper/card_layout_sample.json`をSSOT（Single Source of Truth）**とします。  
 このJSONファイルに記載されている座標、フォントサイズ、フォントウェイトを基準として実装してください。
 
 ## 概要
@@ -55,7 +57,7 @@
 #### 3.1 基本レイアウト構造
 - **確定**: **カード型**
 - 情報をカード形式で配置
-- カード内のレイアウトは`docs/card_layout_sample.json`をSSOTとする
+- カード内のレイアウトは`docs/feature_spec/wallpaper/card_layout_sample.json`をSSOTとする
 
 #### 3.2 表示情報
 

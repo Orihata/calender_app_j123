@@ -94,12 +94,12 @@ Version 1.0.0から1.0.2まで、基本的な機能（Phase 1-5）は実装済�
       - 日付、時間、対戦カードの見やすい表示
       - Noto Sans JPフォント使用
     - PNG形式でのダウンロード
-    - `docs/card_layout_sample.json`をSSOTとして実装
+    - `docs/feature_spec/wallpaper/card_layout_sample.json`をSSOTとして実装
   - **実装場所**:
     - `src/services/imageExportService.js`を新規作成 ✅
     - `src/components/AttendanceList/AttendanceList.jsx`に画像出力ボタンを追加 ✅
     - `src/components/common/WallpaperGenerator.jsx`を新規作成 ✅
-    - `docs/card_layout_sample.json`をSSOTとして作成 ✅
+    - `docs/feature_spec/wallpaper/card_layout_sample.json`をSSOTとして作成 ✅
 
 ### 優先度: 高（必須機能）
 

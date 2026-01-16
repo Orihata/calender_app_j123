@@ -6,6 +6,8 @@
 **更新日**: 2026-01-13  
 **ステータス**: ✅ 実装完了
 
+**参照**: 高レベル設計・全体構造については `specs/1-soccer-match-calendar/spec.md` のUser Story 5を参照してください。本ファイルは実装詳細仕様（SSOT）です。
+
 ---
 
 ## 概要
@@ -323,7 +325,7 @@ static fromJSON(json) {
 
 ### カードレイアウトJSON
 
-- ファイル: `docs/card_layout_sample.json`
+- ファイル: `wallpaper/card_layout_sample.json`（同じディレクトリ内の`wallpaper/`サブディレクトリ）
 - 会場の定義:
   ```json
   {

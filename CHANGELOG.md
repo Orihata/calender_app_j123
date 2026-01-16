@@ -167,6 +167,38 @@
 
 ---
 
+## [1.1.10] - 2026-01-17
+
+### 変更
+- ドキュメント構成の整理
+  - リリースノートを`docs/release_notes/`に統合
+  - 機能仕様書を`docs/feature_spec/`に統合
+  - 調査結果を`docs/survey/`に統合
+  - 手順書を`docs/readme/`に統合
+
+### 改善
+- SSOT（Single Source of Truth）定義の明確化
+  - 実装詳細仕様（`docs/feature_spec/`）と設計構造仕様（`specs/`）の役割分担を明確化
+  - 仕様書の参照関係を階層化
+- 仕様書の整合性確保
+  - 実装済み機能（User Story 4-8）を`specs/`に統合
+  - データモデルの変更を反映（`memo`, `supportingTeam`フィールド）
+  - 実装済みタスクを反映
+- 更新ルールの明確化
+  - スラッシュコマンド使用時や仕様書更新時のルールを明確化
+  - 既存User Story（US1-3）と新規User Story（US4以降）の扱いを区別
+
+### 技術的改善
+- SSOT参照パスの更新（`docs/card_layout_sample.json` → `docs/feature_spec/wallpaper/card_layout_sample.json`）
+- `docs/README.md`の更新（新しいディレクトリ構造に合わせて更新）
+- 相互参照の追加（`specs/`と`docs/feature_spec/`の間に参照関係を明示）
+
+### 注意事項
+- ユーザーへの影響: なし（内部構造の整理のみ）
+- 既存機能への影響: なし
+
+---
+
 ## [1.1.5] - 2026-01-16
 
 ### 追加

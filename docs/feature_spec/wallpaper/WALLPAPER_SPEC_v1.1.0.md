@@ -4,12 +4,11 @@
 **バージョン**: 1.1.2  
 **作成日**: 2026-01-09  
 **更新日**: 2026-01-13（Version 1.1.2対応）  
-**ステータス**: ✅ 実装完了
+**ステータス**: ✅ 実装完了（最新版はv1.2.0を参照）
 
-**重要**: カード内レイアウトの仕様は、**`docs/card_layout_sample.json`をSSOT（Single Source of Truth）**とします。  
-このJSONファイルに記載されている座標、フォントサイズ、フォントウェイトを基準として実装してください。
+**参照**: 高レベル設計・全体構造については `specs/1-soccer-match-calendar/spec.md` のUser Story 4を参照してください。本ファイルは実装詳細仕様（SSOT）の旧版です。最新版は `WALLPAPER_SPEC_v1.2.0.md` を参照してください。
 
-**重要**: カード内レイアウトの仕様は、**`docs/card_layout_sample.json`をSSOT（Single Source of Truth）**とします。  
+**重要**: カード内レイアウトの仕様は、**`docs/feature_spec/wallpaper/card_layout_sample.json`をSSOT（Single Source of Truth）**とします。  
 このJSONファイルに記載されている座標、フォントサイズ、フォントウェイトを基準として実装してください。
 
 ## 概要
@@ -238,7 +237,7 @@
 
 #### 6.3 カード内レイアウト（横長カード - サンプル画像準拠）
 
-**重要**: カード内レイアウトの仕様は、**`docs/card_layout_sample.json`をSSOT（Single Source of Truth）**とします。  
+**重要**: カード内レイアウトの仕様は、**`docs/feature_spec/wallpaper/card_layout_sample.json`をSSOT（Single Source of Truth）**とします。  
 このJSONファイルに記載されている座標、フォントサイズ、フォントウェイトを基準として実装してください。
 
 **JSONファイルの構造**:
@@ -274,7 +273,7 @@
 
 #### 6.4 フォントサイズ・ジャンプ率（card_layout_sample.json準拠）
 
-**重要**: フォントサイズとフォントウェイトは、**`docs/card_layout_sample.json`をSSOT**として参照してください。
+**重要**: フォントサイズとフォントウェイトは、**`docs/feature_spec/wallpaper/card_layout_sample.json`をSSOT**として参照してください。
 
 **JSONファイルに記載されているフォントサイズ（元のサイズ）**:
 

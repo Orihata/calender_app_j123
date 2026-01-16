@@ -2,7 +2,11 @@
 
 **Feature**: サッカー試合予定カレンダーアプリケーション  
 **Date**: 2026-01-09  
-**Status**: Draft
+**Updated**: 2026-01-17  
+**Status**: Active  
+**Current Version**: 1.1.10
+
+**注意**: 実装済み機能の詳細なデータモデル定義は、`docs/feature_spec/` 内の各機能仕様書を参照してください。
 
 ## Entity Relationships
 
@@ -87,6 +91,14 @@ Match (試合予定)
 - `category` (string, required): カテゴリ（'venue' | 'broadcast'）
   - `'venue'`: 現地観戦予定
   - `'broadcast'`: 放送視聴予定
+- `memo` (string | null, optional): ひとことメモのテキスト（最大20文字、Version 1.1.0で追加）
+  - 空文字列の場合は`null`として保存
+  - デフォルト値: `null`
+- `supportingTeam` (string | null, optional): 応援クラブ（'home' | 'away' | null）（Version 1.1.5で追加）
+  - `'home'`: ホームチームを応援
+  - `'away'`: アウェイチームを応援
+  - `null`: 中立
+  - デフォルト値: `null`
 - `createdAt` (string, required): 作成日時（ISO 8601形式）
 - `updatedAt` (string, required): 更新日時（ISO 8601形式）
 
@@ -112,8 +124,23 @@ Match (試合予定)
   "id": "660e8400-e29b-41d4-a716-446655440002",
   "matchId": "550e8400-e29b-41d4-a716-446655440000",
   "category": "broadcast",
+  "memo": null,
+  "supportingTeam": null,
   "createdAt": "2026-01-09T11:00:00+09:00",
   "updatedAt": "2026-01-09T11:00:00+09:00"
+}
+```
+
+**例（メモと応援クラブを含む観戦予定）**:
+```json
+{
+  "id": "660e8400-e29b-41d4-a716-446655440003",
+  "matchId": "550e8400-e29b-41d4-a716-446655440000",
+  "category": "venue",
+  "memo": "初観戦",
+  "supportingTeam": "home",
+  "createdAt": "2026-01-09T11:00:00+09:00",
+  "updatedAt": "2026-01-15T14:30:00+09:00"
 }
 ```
 
@@ -176,9 +203,11 @@ Match (試合予定)
 
 ### AttendancePlan 検証
 
-1. **必須フィールドチェック**: `id`, `matchId`, `createdAt`, `updatedAt` が存在する
+1. **必須フィールドチェック**: `id`, `matchId`, `category`, `createdAt`, `updatedAt` が存在する
 2. **参照整合性チェック**: `matchId` が存在するMatchのIDを参照している
-3. **一意性チェック**: 同じ `matchId` に対するAttendancePlanが既に存在しない
+3. **一意性チェック**: 同じ `matchId` と `category` の組み合わせに対するAttendancePlanが既に存在しない
+4. **メモ検証**: `memo` が存在する場合、最大20文字以内であること（空文字列は`null`として扱う）
+5. **応援クラブ検証**: `supportingTeam` が存在する場合、`'home'`, `'away'`, または `null` であること
 
 ## インデックス戦略
 

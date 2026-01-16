@@ -15,7 +15,7 @@
 - **最大51試合対応**: 3列×17行のレイアウトで最大51試合を1枚の画像にまとめて表示
 - **カスタマイズ可能**: 背景色を選択可能
 - **高品質な描画**: Canvas APIを使用した正確な文字割とレイアウト
-- **SSOT準拠**: `docs/card_layout_sample.json`をSingle Source of Truthとして実装
+- **SSOT準拠**: `docs/feature_spec/wallpaper/card_layout_sample.json`をSingle Source of Truthとして実装
 
 #### 機能詳細
 
@@ -45,7 +45,7 @@
 ### 実装方式
 
 - **Canvas API直接描画**: HTML+CSSでの描画による表記ずれを回避し、Canvas APIで直接描画
-- **SSOT準拠**: `docs/card_layout_sample.json`を唯一の情報源として実装
+- **SSOT準拠**: `docs/feature_spec/wallpaper/card_layout_sample.json`を唯一の情報源として実装
 - **正確なスケーリング**: JSONの座標（659x300px）を実際のカードサイズ（340x135px）に正確にスケーリング
 
 ### フォント
@@ -81,7 +81,7 @@
 - `src/services/imageExportService.js`: 画像生成サービス（Canvas API使用）
 - `src/components/common/WallpaperGenerator.jsx`: 画像生成UIコンポーネント
 - `src/components/common/WallpaperGenerator.css`: 画像生成UIのスタイル
-- `docs/card_layout_sample.json`: カードレイアウト仕様（SSOT）
+- `docs/feature_spec/wallpaper/card_layout_sample.json`: カードレイアウト仕様（SSOT）
 
 ### 依存関係
 

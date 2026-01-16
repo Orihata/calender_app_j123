@@ -9,7 +9,7 @@ import { ja } from 'date-fns/locale'
 import { createGradient, drawRoundedRect, drawTextWithShadow, waitForFontsWithTimeout, preloadFont } from '../utils/canvasUtils.js'
 
 // card_layout_sample.jsonをSSOTとして読み込み
-// JSONファイルの内容（docs/card_layout_sample.json）
+// JSONファイルの内容（docs/feature_spec/wallpaper/card_layout_sample.json）
 const cardLayoutSpec = {
   canvas: {
     width: 659,
