@@ -1,11 +1,11 @@
 <!--
 Sync Impact Report:
-Version change: N/A → 1.0.0 (初回作成)
-Modified principles: N/A (新規作成)
-Added sections: Core Principles (I-V), Local Execution Requirements, Development Workflow, Governance
+Version change: 1.0.0 → 1.1.0 (MINOR: 新しい原則VI. ブランチ戦略を追加)
+Modified principles: N/A
+Added sections: Core Principles VI. ブランチ戦略 (Branch Strategy)
 Removed sections: N/A
 Templates requiring updates:
-  ✅ .specify/templates/plan-template.md (Constitution Check セクションで参照)
+  ✅ .specify/templates/plan-template.md (Constitution Check セクションにVI. ブランチ戦略のチェック項目を追加)
   ✅ .specify/templates/spec-template.md (原則に準拠)
   ✅ .specify/templates/tasks-template.md (原則に準拠)
   ✅ .specify/templates/checklist-template.md (原則に準拠)
@@ -46,6 +46,12 @@ TDDを厳格に遵守する。テストを先に記述し、ユーザー承認�
 YAGNI原則に従い、必要最小限の機能から開始する。複雑さは正当化されなければならない。シンプルな解決策を優先し、過度な抽象化やパターンの適用を避ける。
 
 **根拠**: 保守性と理解しやすさを確保し、開発速度を向上させる。
+
+### VI. ブランチ戦略 (Branch Strategy)
+
+マイナーバージョン（v1.x）ごとに開発ブランチを作成し、リリース時にmainブランチにマージする。開発ブランチの命名規則は `dev_v1.x` 形式とする（例: `dev_v1.2`）。mainブランチへの直接pushは禁止し、すべての変更は開発ブランチ経由で行う。GitHub Pagesへのデプロイはmainブランチへのマージ時に自動的に実行される。
+
+**根拠**: バージョン管理の明確化、リリースプロセスの標準化、mainブランチの安定性確保を実現する。
 
 ## ローカル実行要件 (Local Execution Requirements)
 
@@ -96,4 +102,4 @@ YAGNI原則に従い、必要最小限の機能から開始する。複雑さは
 
 すべてのPR/レビューは憲法への準拠を確認しなければならない。複雑さは正当化されなければならない。
 
-**Version**: 1.0.0 | **Ratified**: 2026-01-09 | **Last Amended**: 2026-01-09
+**Version**: 1.1.0 | **Ratified**: 2026-01-09 | **Last Amended**: 2026-01-16

@@ -135,9 +135,10 @@ function getTeamTextColor(teamName) {
  * 観戦予定データから画像を生成
  * @param {Array} plansWithMatches - 観戦予定と試合データの配列 [{plan, match}, ...]
  * @param {string} backgroundColor - 背景色（HEX形式、デフォルト: #FFFFFF）
+ * @param {string} coloringPattern - カラーリングパターン（'current' | 'classic' | 'home-based'、デフォルト: 'current'）
  * @returns {Promise<Blob>} 生成された画像のBlob
  */
-export async function generateWallpaperImage(plansWithMatches, backgroundColor = '#FFFFFF') {
+export async function generateWallpaperImage(plansWithMatches, backgroundColor = '#FFFFFF', coloringPattern = 'current') {
   // フォントを事前にロード（iOS対策）
   await preloadFont(FONT_FAMILY, ['400', '500', '700'])
   
@@ -196,7 +197,7 @@ export async function generateWallpaperImage(plansWithMatches, backgroundColor =
       console.log(`[Card Layout] index=${index}: col=${col}, row=${row}, x=${cardX}, y=${cardY}`)
     }
 
-    drawCard(ctx, cardX, cardY, plan, match)
+    drawCard(ctx, cardX, cardY, plan, match, coloringPattern)
   })
 
   // CanvasをBlobに変換
@@ -214,8 +215,9 @@ export async function generateWallpaperImage(plansWithMatches, backgroundColor =
  * @param {number} cardY - カードのY座標
  * @param {Object} plan - 観戦予定データ
  * @param {Object} match - 試合データ
+ * @param {string} coloringPattern - カラーリングパターン（'current' | 'classic' | 'home-based'）
  */
-function drawCard(ctx, cardX, cardY, plan, match) {
+function drawCard(ctx, cardX, cardY, plan, match, coloringPattern = 'current') {
   const category = plan.category
   const colors = CATEGORY_COLORS[category] || CATEGORY_COLORS.venue
 
@@ -248,17 +250,27 @@ function drawCard(ctx, cardX, cardY, plan, match) {
     let textContent = getElementText(element.id, match)
     if (!textContent) return // テキストが取得できない場合はスキップ
 
-    // 応援クラブが選択されているかどうかを判定
-    const isSupportingTeam = 
-      (element.id === 'home' && plan.supportingTeam === 'home') ||
-      (element.id === 'away' && plan.supportingTeam === 'away')
+    // パターンに応じた太字判定
+    let isBold = false
+    if (element.id === 'home' || element.id === 'away') {
+      if (coloringPattern === 'current') {
+        // パターン1: 応援クラブを太字
+        const isSupportingTeam = 
+          (element.id === 'home' && plan.supportingTeam === 'home') ||
+          (element.id === 'away' && plan.supportingTeam === 'away')
+        isBold = isSupportingTeam
+      } else if (coloringPattern === 'classic' || coloringPattern === 'home-based') {
+        // パターン2・3: ホームクラブを太字
+        isBold = element.id === 'home'
+      }
+    }
     
     // フォントウェイトを設定
-    // home/awayの場合は、応援クラブが選択されている場合は太字（700）、そうでない場合は通常（400）
+    // home/awayの場合は、パターンに応じた太字判定を使用
     // それ以外の要素は元の設定を維持
     let fontWeight = element.fontWeight === 700 ? '700' : element.fontWeight === 500 ? '500' : '400'
     if (element.id === 'home' || element.id === 'away') {
-      fontWeight = isSupportingTeam ? '700' : '400'
+      fontWeight = isBold ? '700' : '400'
     }
     
     ctx.save()
@@ -295,7 +307,7 @@ function drawCard(ctx, cardX, cardY, plan, match) {
   })
 
   // メモエリアを描画
-  drawMemoArea(ctx, cardX, cardY, plan, match, colors)
+  drawMemoArea(ctx, cardX, cardY, plan, match, colors, coloringPattern)
 }
 
 /**
@@ -306,23 +318,35 @@ function drawCard(ctx, cardX, cardY, plan, match) {
  * @param {Object} plan - 観戦予定データ
  * @param {Object} match - 試合データ
  * @param {Object} colors - カテゴリ別の色設定
+ * @param {string} coloringPattern - カラーリングパターン（'current' | 'classic' | 'home-based'）
  */
-function drawMemoArea(ctx, cardX, cardY, plan, match, colors) {
+function drawMemoArea(ctx, cardX, cardY, plan, match, colors, coloringPattern = 'current') {
   const memo = plan.memo
   const memoY = cardY + CARD_HEIGHT // カード本体の下に配置
   
-  // メモエリアの背景色を応援クラブに応じて設定
-  // 応援クラブが選択されている場合はそのチームの色、そうでない場合はデフォルト色
+  // パターンに応じたメモエリアの背景色を設定
   let memoBackgroundColor = MEMO_BACKGROUND_COLOR // デフォルト色
-  if (plan.supportingTeam === 'home') {
+  if (coloringPattern === 'current') {
+    // パターン1: 応援クラブの色
+    if (plan.supportingTeam === 'home') {
+      const homeColor = getTeamTextColor(match.homeTeam)
+      if (homeColor) {
+        memoBackgroundColor = homeColor
+      }
+    } else if (plan.supportingTeam === 'away') {
+      const awayColor = getTeamTextColor(match.awayTeam)
+      if (awayColor) {
+        memoBackgroundColor = awayColor
+      }
+    }
+  } else if (coloringPattern === 'classic') {
+    // パターン2: デフォルト色（既に設定済み）
+    memoBackgroundColor = MEMO_BACKGROUND_COLOR
+  } else if (coloringPattern === 'home-based') {
+    // パターン3: ホームクラブの色
     const homeColor = getTeamTextColor(match.homeTeam)
     if (homeColor) {
       memoBackgroundColor = homeColor
-    }
-  } else if (plan.supportingTeam === 'away') {
-    const awayColor = getTeamTextColor(match.awayTeam)
-    if (awayColor) {
-      memoBackgroundColor = awayColor
     }
   }
   

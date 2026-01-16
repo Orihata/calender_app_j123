@@ -12,6 +12,7 @@ function WallpaperGenerator({ plansWithMatches, onClose }) {
   const [error, setError] = useState(null)
   const [warning, setWarning] = useState(null)
   const [backgroundColor, setBackgroundColor] = useState('#FFFFFF')
+  const [coloringPattern, setColoringPattern] = useState('current')
 
   /**
    * 画像を生成
@@ -38,7 +39,7 @@ function WallpaperGenerator({ plansWithMatches, onClose }) {
       }
 
       // 画像を生成（警告があっても続行）
-      const blob = await generateWallpaperImage(venuePlans, backgroundColor)
+      const blob = await generateWallpaperImage(venuePlans, backgroundColor, coloringPattern)
       const url = URL.createObjectURL(blob)
       setPreviewUrl(url)
     } catch (err) {
@@ -100,6 +101,19 @@ function WallpaperGenerator({ plansWithMatches, onClose }) {
                   onChange={(e) => setBackgroundColor(e.target.value)}
                 />
                 <span>{backgroundColor}</span>
+              </div>
+
+              <div className="wallpaper-pattern-selector">
+                <label htmlFor="coloring-pattern">カラーリングパターン:</label>
+                <select
+                  id="coloring-pattern"
+                  value={coloringPattern}
+                  onChange={(e) => setColoringPattern(e.target.value)}
+                >
+                  <option value="current">通常</option>
+                  <option value="classic">クラシック</option>
+                  <option value="home-based">ホームゲーム</option>
+                </select>
               </div>
 
               <button
