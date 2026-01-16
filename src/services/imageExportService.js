@@ -248,22 +248,40 @@ function drawCard(ctx, cardX, cardY, plan, match) {
     let textContent = getElementText(element.id, match)
     if (!textContent) return // テキストが取得できない場合はスキップ
 
-    // フォントを設定
-    const fontWeight = element.fontWeight === 700 ? '700' : element.fontWeight === 500 ? '500' : '400'
+    // 応援クラブが選択されているかどうかを判定
+    const isSupportingTeam = 
+      (element.id === 'home' && plan.supportingTeam === 'home') ||
+      (element.id === 'away' && plan.supportingTeam === 'away')
+    
+    // フォントウェイトを設定
+    // home/awayの場合は、応援クラブが選択されている場合は太字（700）、そうでない場合は通常（400）
+    // それ以外の要素は元の設定を維持
+    let fontWeight = element.fontWeight === 700 ? '700' : element.fontWeight === 500 ? '500' : '400'
+    if (element.id === 'home' || element.id === 'away') {
+      fontWeight = isSupportingTeam ? '700' : '400'
+    }
+    
     ctx.save()
     ctx.font = `${fontWeight} ${scaledFontSize}px "${FONT_FAMILY}", serif`
     
     // HomeとAwayの場合は、それぞれのチームのtextカラーを使用
+    // 登録がないクラブの場合は、メモ欄の背景色と同じ色を使用
     let textColor = colors.textColor // デフォルト色
     if (element.id === 'home') {
       const homeTextColor = getTeamTextColor(match.homeTeam)
       if (homeTextColor) {
         textColor = homeTextColor
+      } else {
+        // 登録がないクラブの場合はメモ欄の背景色を使用
+        textColor = MEMO_BACKGROUND_COLOR
       }
     } else if (element.id === 'away') {
       const awayTextColor = getTeamTextColor(match.awayTeam)
       if (awayTextColor) {
         textColor = awayTextColor
+      } else {
+        // 登録がないクラブの場合はメモ欄の背景色を使用
+        textColor = MEMO_BACKGROUND_COLOR
       }
     }
     
@@ -277,7 +295,7 @@ function drawCard(ctx, cardX, cardY, plan, match) {
   })
 
   // メモエリアを描画
-  drawMemoArea(ctx, cardX, cardY, plan, colors)
+  drawMemoArea(ctx, cardX, cardY, plan, match, colors)
 }
 
 /**
@@ -286,14 +304,27 @@ function drawCard(ctx, cardX, cardY, plan, match) {
  * @param {number} cardX - カードのX座標
  * @param {number} cardY - カードのY座標
  * @param {Object} plan - 観戦予定データ
+ * @param {Object} match - 試合データ
  * @param {Object} colors - カテゴリ別の色設定
  */
-function drawMemoArea(ctx, cardX, cardY, plan, colors) {
+function drawMemoArea(ctx, cardX, cardY, plan, match, colors) {
   const memo = plan.memo
   const memoY = cardY + CARD_HEIGHT // カード本体の下に配置
   
-  // メモエリアの背景色を統一（メモの有無に関わらず常に統一色を使用）
-  const memoBackgroundColor = MEMO_BACKGROUND_COLOR
+  // メモエリアの背景色を応援クラブに応じて設定
+  // 応援クラブが選択されている場合はそのチームの色、そうでない場合はデフォルト色
+  let memoBackgroundColor = MEMO_BACKGROUND_COLOR // デフォルト色
+  if (plan.supportingTeam === 'home') {
+    const homeColor = getTeamTextColor(match.homeTeam)
+    if (homeColor) {
+      memoBackgroundColor = homeColor
+    }
+  } else if (plan.supportingTeam === 'away') {
+    const awayColor = getTeamTextColor(match.awayTeam)
+    if (awayColor) {
+      memoBackgroundColor = awayColor
+    }
+  }
   
   // メモエリアの背景を描画（下部のみ角丸）- すべてのカードで常に表示
   ctx.save()
