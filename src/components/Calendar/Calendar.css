@@ -6,11 +6,13 @@
 }
 
 .calendar-header {
-  background-color: white;
+  background-color: #f0f0f0;
   padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: inset 6px 6px 12px rgba(0, 0, 0, 0.2), 
+              inset -6px -6px 12px rgba(255, 255, 255, 0.7);
   margin-bottom: 1.5rem;
+  border: none;
 }
 
 .calendar-header h2 {
@@ -26,32 +28,44 @@
   justify-content: center;
 }
 
-.btn-nav,
-.btn-today {
+.btn-nav {
   padding: 0.5rem 1rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: white;
+  border: none;
+  border-radius: 12px;
+  background-color: #f0f0f0;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
   font-size: 0.9rem;
   flex: 0 0 auto;
   min-width: auto;
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.2), 
+              -6px -6px 12px rgba(255, 255, 255, 0.7);
 }
 
-.btn-nav:hover,
-.btn-today:hover {
-  background-color: #f8f9fa;
+.btn-nav:hover {
+  box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.25), 
+              -8px -8px 16px rgba(255, 255, 255, 0.8);
 }
 
 .btn-today {
-  background-color: #007bff;
-  color: white;
-  border-color: #007bff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 12px;
+  background-color: #b3d9ff;
+  color: #2c3e50;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+  flex: 0 0 auto;
+  min-width: auto;
+  box-shadow: 4px 4px 8px rgba(0, 123, 255, 0.3), 
+              -4px -4px 8px rgba(255, 255, 255, 0.7);
 }
 
 .btn-today:hover {
-  background-color: #0056b3;
+  background-color: #99c7ff;
+  box-shadow: 6px 6px 12px rgba(0, 123, 255, 0.35), 
+              -6px -6px 12px rgba(255, 255, 255, 0.8);
 }
 
 .calendar-month {
@@ -61,14 +75,16 @@
 }
 
 .calendar-grid {
-  background-color: white;
+  background-color: #f0f0f0;
   padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: inset 6px 6px 12px rgba(0, 0, 0, 0.2), 
+              inset -6px -6px 12px rgba(255, 255, 255, 0.7);
   margin-bottom: 1.5rem;
   overflow: hidden;
   width: 100%;
   box-sizing: border-box;
+  border: none;
 }
 
 .calendar-weekdays {
@@ -100,8 +116,8 @@
 
 .calendar-day {
   aspect-ratio: 1;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: none;
+  border-radius: 12px;
   padding: 0.5rem;
   cursor: pointer;
   transition: all 0.2s;
@@ -109,55 +125,66 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  background-color: white;
+  background-color: #f0f0f0;
   position: relative;
   overflow: visible;
   min-width: 0;
   box-sizing: border-box;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), 
+              -4px -4px 8px rgba(255, 255, 255, 0.7);
 }
 
 .calendar-day:hover {
-  background-color: #f8f9fa;
-  border-color: #007bff;
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.25), 
+              -6px -6px 12px rgba(255, 255, 255, 0.8);
 }
 
 .calendar-day.other-month {
   color: #ccc;
-  background-color: #f8f9fa;
+  opacity: 0.6;
 }
 
 .calendar-day.today {
   background-color: #e3f2fd;
-  border-color: #2196f3;
   font-weight: 600;
+  box-shadow: 4px 4px 8px rgba(33, 150, 243, 0.3), 
+              -4px -4px 8px rgba(255, 255, 255, 0.7);
 }
 
 .calendar-day.selected {
   background-color: #007bff;
   color: white;
-  border-color: #0056b3;
+  box-shadow: 4px 4px 8px rgba(0, 123, 255, 0.4), 
+              -4px -4px 8px rgba(255, 255, 255, 0.1);
 }
 
 .calendar-day.has-matches {
-  border-color: #dc3545;
-  border-width: 2px;
+  box-shadow: 4px 4px 8px rgba(220, 53, 69, 0.3), 
+              -4px -4px 8px rgba(255, 255, 255, 0.7);
 }
 
 .calendar-day.has-matches.selected {
-  border-color: #0056b3;
+  box-shadow: 4px 4px 8px rgba(0, 123, 255, 0.4), 
+              -4px -4px 8px rgba(255, 255, 255, 0.1);
 }
 
 .calendar-day.has-attendance {
   background-color: #fff9c4;
+  box-shadow: 4px 4px 8px rgba(255, 249, 196, 0.4), 
+              -4px -4px 8px rgba(255, 255, 255, 0.7);
 }
 
 .calendar-day.has-attendance.today {
   background-color: #fff59d;
+  box-shadow: 4px 4px 8px rgba(255, 245, 157, 0.4), 
+              -4px -4px 8px rgba(255, 255, 255, 0.7);
 }
 
 .calendar-day.has-attendance.selected {
   background-color: #007bff;
   color: white;
+  box-shadow: 4px 4px 8px rgba(0, 123, 255, 0.4), 
+              -4px -4px 8px rgba(255, 255, 255, 0.1);
 }
 
 .day-number {
@@ -175,7 +202,7 @@
   padding: 0 4px;
   background-color: #dc3545;
   color: white;
-  border-radius: 9px;
+  border-radius: 14px;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -195,7 +222,7 @@
   padding: 0.125rem 0.25rem;
   background-color: #28a745;
   color: white;
-  border-radius: 3px;
+  border-radius: 8px;
   font-weight: 600;
 }
 
@@ -210,10 +237,12 @@
 }
 
 .selected-date-matches {
-  background-color: white;
+  background-color: #f0f0f0;
   padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: inset 6px 6px 12px rgba(0, 0, 0, 0.2), 
+              inset -6px -6px 12px rgba(255, 255, 255, 0.7);
+  border: none;
 }
 
 .selected-date-matches h3 {
@@ -396,11 +425,13 @@
   flex-direction: column;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  background-color: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f0f0f0;
+  box-shadow: 0 -6px 16px rgba(0, 0, 0, 0.2), 
+              0 6px 16px rgba(255, 255, 255, 0.7);
   z-index: 1000;
   max-height: 40vh;
   overflow-y: auto;
+  border: none;
 }
 
 .candy-bar-item {
@@ -408,28 +439,35 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.75rem 1rem;
-  border-radius: 6px;
+  border-radius: 14px;
   font-size: 0.95rem;
   font-weight: 500;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), 
+              -4px -4px 8px rgba(255, 255, 255, 0.7);
+  border: none;
+  background-color: #f0f0f0;
 }
 
-/* 現地観戦: 薄青 */
+/* 現地観戦: 控えめな青のアクセント */
 .candy-bar-item.candy-bar-venue {
-  background-color: #b3d9ff;
+  background-color: #f0f0f0;
   color: #003d7a;
+  box-shadow: 4px 4px 8px rgba(0, 123, 255, 0.15), 
+              -4px -4px 8px rgba(255, 255, 255, 0.7);
 }
 
-/* 放送観戦: 薄緑 */
+/* 放送観戦: 控えめな緑のアクセント */
 .candy-bar-item.candy-bar-broadcast {
-  background-color: #b3ffb3;
+  background-color: #f0f0f0;
   color: #003d00;
+  box-shadow: 4px 4px 8px rgba(40, 167, 69, 0.15), 
+              -4px -4px 8px rgba(255, 255, 255, 0.7);
 }
 
 .candy-bar-category {
   display: inline-block;
   padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  border-radius: 12px;
   font-weight: 600;
   font-size: 0.85rem;
   margin-right: 0.5rem;

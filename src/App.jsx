@@ -68,7 +68,6 @@ function App() {
       <div className="App">
         <header className="app-header">
           <h1>サッカー試合予定カレンダー</h1>
-          <Nav />
         </header>
         <main className="app-main">
           {!masterDataLoaded && (
@@ -83,68 +82,52 @@ function App() {
             <Route path="/settings" element={<Settings />} />
           </Routes>
         </main>
+        <Nav />
       </div>
     </Router>
   )
 }
 
 /**
- * ナビゲーションコンポーネント
+ * ナビゲーションコンポーネント（フッターアイコン）
  */
 function Nav() {
   const location = useLocation()
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false)
-  
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
-  
-  const closeMenu = () => {
-    setIsMenuOpen(false)
-  }
   
   return (
-    <nav className="app-nav">
-      <button 
-        className="hamburger-menu"
-        onClick={toggleMenu}
-        aria-label="メニューを開く"
+    <nav className="app-footer-nav">
+      <Link 
+        to="/" 
+        className={`footer-nav-item ${location.pathname === '/' ? 'active' : ''}`}
+        aria-label="カレンダー"
       >
-        <span className="hamburger-icon"></span>
-        <span className="hamburger-icon"></span>
-        <span className="hamburger-icon"></span>
-      </button>
-      <div className={`nav-links ${isMenuOpen ? 'open' : ''}`}>
-        <Link 
-          to="/" 
-          className={location.pathname === '/' ? 'active' : ''}
-          onClick={closeMenu}
-        >
-          カレンダー
-        </Link>
-        <Link 
-          to="/import" 
-          className={location.pathname === '/import' ? 'active' : ''}
-          onClick={closeMenu}
-        >
-          データ編集
-        </Link>
-        <Link 
-          to="/attendance" 
-          className={location.pathname === '/attendance' ? 'active' : ''}
-          onClick={closeMenu}
-        >
-          観戦予定
-        </Link>
-        <Link 
-          to="/settings" 
-          className={location.pathname === '/settings' ? 'active' : ''}
-          onClick={closeMenu}
-        >
-          設定
-        </Link>
-      </div>
-      <div className={`nav-overlay ${isMenuOpen ? 'active' : ''}`} onClick={closeMenu}></div>
+        <span className="footer-nav-icon">📅</span>
+        <span className="footer-nav-label">カレンダー</span>
+      </Link>
+      <Link 
+        to="/import" 
+        className={`footer-nav-item ${location.pathname === '/import' ? 'active' : ''}`}
+        aria-label="データ編集"
+      >
+        <span className="footer-nav-icon">✏️</span>
+        <span className="footer-nav-label">データ編集</span>
+      </Link>
+      <Link 
+        to="/attendance" 
+        className={`footer-nav-item ${location.pathname === '/attendance' ? 'active' : ''}`}
+        aria-label="観戦予定"
+      >
+        <span className="footer-nav-icon">📋</span>
+        <span className="footer-nav-label">観戦予定</span>
+      </Link>
+      <Link 
+        to="/settings" 
+        className={`footer-nav-item ${location.pathname === '/settings' ? 'active' : ''}`}
+        aria-label="設定"
+      >
+        <span className="footer-nav-icon">⚙️</span>
+        <span className="footer-nav-label">設定</span>
+      </Link>
     </nav>
   )
 }

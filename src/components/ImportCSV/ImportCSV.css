@@ -10,11 +10,13 @@
 
 /* トップページ：選択ボタン */
 .data-edit-top {
-  background-color: white;
+  background-color: #f0f0f0;
   padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: inset 6px 6px 12px rgba(0, 0, 0, 0.2), 
+              inset -6px -6px 12px rgba(255, 255, 255, 0.7);
   margin-bottom: 2rem;
+  border: none;
 }
 
 .top-button-group {
@@ -26,10 +28,12 @@
 .btn {
   padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 12px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), 
+              -4px -4px 8px rgba(255, 255, 255, 0.7);
 }
 
 .btn:disabled {
@@ -49,30 +53,42 @@
 }
 
 .btn-primary {
-  background-color: #007bff;
-  color: white;
+  background-color: #b3d9ff;
+  color: #2c3e50;
+  box-shadow: 4px 4px 8px rgba(0, 123, 255, 0.3), 
+              -4px -4px 8px rgba(255, 255, 255, 0.7);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: #0056b3;
+  background-color: #99c7ff;
+  box-shadow: 6px 6px 12px rgba(0, 123, 255, 0.35), 
+              -6px -6px 12px rgba(255, 255, 255, 0.8);
 }
 
 .btn-secondary {
   background-color: #6c757d;
   color: white;
+  box-shadow: 4px 4px 8px rgba(108, 117, 125, 0.3), 
+              -4px -4px 8px rgba(255, 255, 255, 0.1);
 }
 
 .btn-secondary:hover:not(:disabled) {
   background-color: #545b62;
+  box-shadow: 6px 6px 12px rgba(84, 91, 98, 0.35), 
+              -6px -6px 12px rgba(255, 255, 255, 0.15);
 }
 
 .btn-danger {
   background-color: #dc3545;
   color: white;
+  box-shadow: 4px 4px 8px rgba(220, 53, 69, 0.4), 
+              -4px -4px 8px rgba(255, 255, 255, 0.1);
 }
 
 .btn-danger:hover:not(:disabled) {
   background-color: #c82333;
+  box-shadow: 6px 6px 12px rgba(200, 35, 51, 0.45), 
+              -6px -6px 12px rgba(255, 255, 255, 0.15);
 }
 
 /* モーダル共通スタイル */
@@ -81,25 +97,28 @@
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 80px; /* フッターナビの高さを考慮 */
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   padding: 1rem;
+  padding-bottom: calc(1rem + 80px); /* フッターの高さを考慮 */
 }
 
 .modal-content {
-  background-color: white;
-  border-radius: 8px;
+  background-color: #f0f0f0;
+  border-radius: 20px;
   max-width: 800px;
   width: 100%;
-  max-height: 90vh;
+  max-height: calc(90vh - 80px); /* フッターナビの高さを考慮 */
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.3), 
+              -8px -8px 16px rgba(255, 255, 255, 0.7);
   display: flex;
   flex-direction: column;
+  border: none;
 }
 
 .modal-header {
@@ -107,7 +126,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 1px solid rgba(222, 226, 230, 0.3);
   flex-shrink: 0;
 }
 
@@ -129,12 +148,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
+  border-radius: 12px;
   transition: background-color 0.2s;
 }
 
 .modal-close:hover {
-  background-color: #f8f9fa;
+  background-color: rgba(248, 249, 250, 0.3);
   color: #2c3e50;
 }
 
@@ -149,7 +168,7 @@
   justify-content: flex-end;
   gap: 1rem;
   padding: 1rem 1.5rem;
-  border-top: 1px solid #dee2e6;
+  border-top: 1px solid rgba(222, 226, 230, 0.3);
   flex-shrink: 0;
 }
 
@@ -159,11 +178,13 @@
 }
 
 .import-csv-form {
-  background-color: white;
+  background-color: #f0f0f0;
   padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: inset 6px 6px 12px rgba(0, 0, 0, 0.2), 
+              inset -6px -6px 12px rgba(255, 255, 255, 0.7);
   margin-bottom: 2rem;
+  border: none;
 }
 
 .file-input-group {
@@ -180,19 +201,25 @@
 .file-input-group input[type="file"] {
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: none;
+  border-radius: 12px;
   font-size: 1rem;
+  background-color: #f0f0f0;
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2), 
+              inset -4px -4px 8px rgba(255, 255, 255, 0.7);
 }
 
 .file-info {
   margin-top: 0.5rem;
   padding: 0.5rem;
-  background-color: #f8f9fa;
-  border-radius: 4px;
+  background-color: #f0f0f0;
+  border-radius: 12px;
   display: flex;
   gap: 0.5rem;
   align-items: center;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), 
+              -4px -4px 8px rgba(255, 255, 255, 0.7);
+  border: none;
 }
 
 .file-size {
@@ -211,16 +238,19 @@
   background-color: #f8d7da;
   color: #721c24;
   padding: 1rem;
-  border-radius: 4px;
+  border-radius: 12px;
   margin-bottom: 1rem;
   border: 1px solid #f5c6cb;
 }
 
 .import-result {
-  background-color: #f8f9fa;
+  background-color: #f0f0f0;
   padding: 1.5rem;
-  border-radius: 8px;
+  border-radius: 20px;
   margin-top: 1rem;
+  box-shadow: inset 6px 6px 12px rgba(0, 0, 0, 0.2), 
+              inset -6px -6px 12px rgba(255, 255, 255, 0.7);
+  border: none;
 }
 
 .import-result h4 {
@@ -244,7 +274,7 @@
 
 .summary-item {
   padding: 0.75rem 1rem;
-  border-radius: 4px;
+  border-radius: 12px;
   display: flex;
   gap: 0.5rem;
   align-items: center;
@@ -287,9 +317,11 @@
 .save-error-list li {
   padding: 0.5rem;
   margin-bottom: 0.5rem;
-  background-color: #f8f9fa;
-  border-radius: 4px;
+  background-color: #f0f0f0;
+  border-radius: 12px;
   border-left: 3px solid #dc3545;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), 
+              -4px -4px 8px rgba(255, 255, 255, 0.7);
 }
 
 .warning-list li {
@@ -347,21 +379,24 @@
 .form-group input[type="text"] {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: none;
+  border-radius: 12px;
   font-size: 1rem;
-  transition: border-color 0.2s;
+  transition: all 0.2s;
   box-sizing: border-box;
+  background-color: #f0f0f0;
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2), 
+              inset -4px -4px 8px rgba(255, 255, 255, 0.7);
 }
 
 .form-group input[type="text"]:focus {
   outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  box-shadow: inset 4px 4px 8px rgba(0, 123, 255, 0.3), 
+              inset -4px -4px 8px rgba(255, 255, 255, 0.7);
 }
 
 .form-group input[type="text"]:disabled {
-  background-color: #f8f9fa;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
@@ -369,7 +404,7 @@
   background-color: #f8d7da;
   color: #721c24;
   padding: 1rem;
-  border-radius: 4px;
+  border-radius: 12px;
   margin-bottom: 1rem;
   border: 1px solid #f5c6cb;
 }
@@ -378,7 +413,7 @@
   background-color: #d4edda;
   color: #155724;
   padding: 1rem;
-  border-radius: 4px;
+  border-radius: 12px;
   margin-bottom: 1rem;
   border: 1px solid #c3e6cb;
 }
@@ -417,6 +452,12 @@
   max-height: 400px;
   overflow-y: auto;
   margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: #f0f0f0;
+  border-radius: 20px;
+  box-shadow: inset 6px 6px 12px rgba(0, 0, 0, 0.2), 
+              inset -6px -6px 12px rgba(255, 255, 255, 0.7);
+  border: none;
 }
 
 /* 削除画面専用の一行表示スタイル - 他のコンポーネントとの競合を避けるため専用クラス名を使用 */
@@ -428,19 +469,23 @@
 
 .delete-list-item {
   margin-bottom: 0.5rem;
-  border: 1px solid #dee2e6;
-  border-radius: 4px;
-  transition: background-color 0.2s, border-color 0.2s;
-  background-color: white;
+  border: none;
+  border-radius: 12px;
+  transition: all 0.2s;
+  background-color: #f0f0f0;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), 
+              -4px -4px 8px rgba(255, 255, 255, 0.7);
 }
 
 .delete-list-item:hover {
-  background-color: #f8f9fa;
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.25), 
+              -6px -6px 12px rgba(255, 255, 255, 0.8);
 }
 
 .delete-list-item.selected {
   background-color: #e7f3ff;
-  border-color: #007bff;
+  box-shadow: 4px 4px 8px rgba(0, 123, 255, 0.3), 
+              -4px -4px 8px rgba(255, 255, 255, 0.7);
 }
 
 /* 削除モーダルの基本スタイル */
@@ -612,7 +657,7 @@
   /* 削除モーダル以外のモーダルは従来通り */
   .modal-content:not(.delete-modal-content) {
     max-width: 100%;
-    max-height: 95vh;
+    max-height: calc(95vh - 80px); /* フッターナビの高さを考慮 */
     margin: 0.5rem;
   }
   
@@ -641,8 +686,8 @@
   /* 削除モーダルを全画面表示にする（モバイルで一行表示を維持するため） */
   .delete-modal-content {
     max-width: 100% !important;
-    max-height: 100vh !important;
-    height: 100vh !important;
+    max-height: calc(100vh - 80px) !important; /* フッターナビの高さを考慮 */
+    height: calc(100vh - 80px) !important;
     margin: 0 !important;
     border-radius: 0 !important;
   }
@@ -670,6 +715,21 @@
 
   .match-list-container {
     max-height: calc(100vh - 250px) !important; /* 全画面表示時の高さ調整 */
+  }
+
+  /* モバイルではフッターの高さが70px */
+  .modal-overlay {
+    bottom: 70px !important;
+    padding-bottom: calc(1rem + 70px) !important;
+  }
+
+  .modal-content:not(.delete-modal-content) {
+    max-height: calc(95vh - 70px) !important;
+  }
+
+  .delete-modal-content {
+    max-height: calc(100vh - 70px) !important;
+    height: calc(100vh - 70px) !important;
   }
 
   /* 削除画面では一行表示を維持（全画面モーダルなので横幅が確保できる） */
