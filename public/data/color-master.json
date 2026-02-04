@@ -1,6 +1,6 @@
 {
-  "version": "1.2.0",
-  "lastUpdated": "2026-01-13T15:27:03+09:00",
+  "version": "1.2.2",
+  "lastUpdated": "2026-01-XXT00:00:00+09:00",
   "colors": {
     "FC大阪": {
       "original": "#9FCDFF",
@@ -481,6 +481,22 @@
       "text": "#323299",
       "gradientStart": "#dfdfeb",
       "gradientEnd": "#e7e7ee"
+    },
+    "V大分": {
+      "original": "#c7000d",
+      "background1": "#ecc6c8",
+      "background2": "#eeddde",
+      "text": "#99000a",
+      "gradientStart": "#e9d2d4",
+      "gradientEnd": "#f0e6e6"
+    },
+    "JLFC": {
+      "original": "#0353a4",
+      "background1": "#c6d9ec",
+      "background2": "#dde5ee",
+      "text": "#004c99",
+      "gradientStart": "#d2dee9",
+      "gradientEnd": "#e6ebf0"
     }
   }
 }

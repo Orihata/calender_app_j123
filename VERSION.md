@@ -289,6 +289,26 @@ UI/UXデザインの大幅な改善とレスポンシブ対応の最適化
 
 ---
 
+## Version 1.2.2
+
+**リリース日**: 2026-01-XX
+
+### 概要
+クラブカラーにヴェルスパ大分（V大分）とジェイリースFC（JLFC）を追加しました。
+
+### 主な変更内容
+
+#### クラブカラーの追加
+- **ヴェルスパ大分（V大分）**: original="#c7000d"
+- **ジェイリースFC（JLFC）**: original="#0353a4"
+- 全色情報（background1, background2, text, gradientStart, gradientEnd）を自動生成して追加
+
+### 技術的改善
+- `src/utils/colorUtils.js`: 色生成ユーティリティを追加（HEX↔HSL変換、originalカラーから全色情報の自動生成）
+- `public/data/color-master.json`: 2つのクラブカラーを追加、versionを"1.2.2"に更新
+
+---
+
 ## Version 1.2.0
 
 **リリース日**: 2026-01-16

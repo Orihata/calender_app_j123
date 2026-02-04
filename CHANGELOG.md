@@ -2,6 +2,24 @@
 
 このプロジェクトのすべての重要な変更は、このファイルに記録されます。
 
+## [1.2.2] - 2026-01-XX
+
+### 追加
+- クラブカラーにヴェルスパ大分（V大分）を追加
+  - original: #c7000d
+  - 全色情報（background1, background2, text, gradientStart, gradientEnd）を自動生成
+- クラブカラーにジェイリースFC（JLFC）を追加
+  - original: #0353a4
+  - 全色情報（background1, background2, text, gradientStart, gradientEnd）を自動生成
+
+### 技術的改善
+- `src/utils/colorUtils.js`: 色生成ユーティリティを追加
+  - HEX↔HSL変換機能
+  - originalカラーから全色情報を自動生成する機能
+- `public/data/color-master.json`: versionを"1.2.2"に更新
+
+---
+
 ## [1.2.1] - 2026-01-XX
 
 ### 追加
