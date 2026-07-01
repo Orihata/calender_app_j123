@@ -84,6 +84,18 @@ function parseTeamName(teamStr) {
   return team
 }
 
+/** マッチＮｏ［１］ 等は broadcast ではなく Etc（additionalInfo）へ */
+function parseBroadcastAndEtc(broadcastStr) {
+  const text = broadcastStr.trim()
+  if (!text) {
+    return { broadcast: '', etc: '' }
+  }
+  if (/マッチ/.test(text)) {
+    return { broadcast: '', etc: text }
+  }
+  return { broadcast: text, etc: '' }
+}
+
 function escapeCsvField(value) {
   const str = value ?? ''
   if (/[",\n\r]/.test(str)) {
@@ -137,6 +149,8 @@ function convertRow(cells) {
     return { skipped: true, reason: `日付未定または不正: ${dateRaw}` }
   }
 
+  const { broadcast: broadcastValue, etc } = parseBroadcastAndEtc(broadcast)
+
   return {
     skipped: false,
     row: {
@@ -147,8 +161,8 @@ function convertRow(cells) {
       Home: parseTeamName(home),
       Away: parseTeamName(away),
       Stadium: parseStadium(stadiumRaw),
-      Broadcast: broadcast.trim(),
-      Etc: ''
+      Broadcast: broadcastValue,
+      Etc: etc
     }
   }
 }
