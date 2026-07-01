@@ -9,6 +9,7 @@
 }
 
 .storage-info,
+.season-archive,
 .data-management,
 .usage-info {
   background-color: white;
@@ -19,6 +20,7 @@
 }
 
 .storage-info h3,
+.season-archive h3,
 .data-management h3,
 .usage-info h3 {
   margin: 0 0 1rem 0;
@@ -93,6 +95,44 @@
   border: 2px solid #dc3545;
 }
 
+.archive-description,
+.archive-note {
+  color: #6c757d;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.archive-preview {
+  margin-bottom: 1rem;
+}
+
+.archive-status {
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+}
+
+.archive-status.archived {
+  color: #198754;
+}
+
+.archive-status.pending {
+  color: #856404;
+}
+
+.archive-counts {
+  margin: 0 0 1rem 1.25rem;
+  color: #495057;
+}
+
+.btn-archive {
+  background-color: #0d6efd;
+  color: white;
+}
+
+.btn-archive:hover:not(:disabled) {
+  background-color: #0b5ed7;
+}
+
 .usage-info ul {
   margin: 0;
   padding-left: 1.5rem;
@@ -111,6 +151,7 @@
   }
 
   .storage-info,
+  .season-archive,
   .data-management,
   .usage-info {
     padding: 1rem;

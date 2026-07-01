@@ -5,7 +5,8 @@
 
 const STORAGE_KEYS = {
   MATCHES: 'matches',
-  ATTENDANCE_PLANS: 'attendancePlans'
+  ATTENDANCE_PLANS: 'attendancePlans',
+  ARCHIVED_SEASONS: 'archivedSeasons'
 }
 
 /**
@@ -76,6 +77,51 @@ export async function saveAttendancePlans(plans) {
     }
     throw new Error('観戦予定の保存に失敗しました')
   }
+}
+
+/**
+ * アーカイブ済みシーズンデータを取得
+ * @returns {Promise<Array>} アーカイブの配列
+ */
+export async function getArchivedSeasons() {
+  try {
+    const data = localStorage.getItem(STORAGE_KEYS.ARCHIVED_SEASONS)
+    if (!data) {
+      return []
+    }
+    return JSON.parse(data)
+  } catch (error) {
+    console.error('アーカイブデータの取得エラー:', error)
+    throw new Error('アーカイブデータの取得に失敗しました')
+  }
+}
+
+/**
+ * アーカイブ済みシーズンデータを保存
+ * @param {Array} archives
+ * @returns {Promise<void>}
+ */
+export async function saveArchivedSeasons(archives) {
+  try {
+    localStorage.setItem(STORAGE_KEYS.ARCHIVED_SEASONS, JSON.stringify(archives))
+  } catch (error) {
+    console.error('アーカイブデータの保存エラー:', error)
+    if (error.name === 'QuotaExceededError') {
+      throw new Error('ストレージ容量が不足しています')
+    }
+    throw new Error('アーカイブデータの保存に失敗しました')
+  }
+}
+
+/**
+ * アーカイブを追加（既存アーカイブに追記）
+ * @param {Object} archive
+ * @returns {Promise<void>}
+ */
+export async function appendArchivedSeason(archive) {
+  const archives = await getArchivedSeasons()
+  archives.push(archive)
+  await saveArchivedSeasons(archives)
 }
 
 /**
