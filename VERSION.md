@@ -1,6 +1,23 @@
 # バージョン情報
 
-**現在のバージョン**: 1.2.1（2026-01-XX）
+**現在のバージョン**: 2.0.0（2026-07-01）
+
+## Version 2.0.0
+
+**リリース日**: 2026-07-01
+
+### 概要
+2026/27シーズンの試合日程に対応。J. League Data Site からのデータ取り込みツールを追加し、マスタデータを全面更新。
+
+### データ
+- **マスタデータ**: 1,191件の試合予定（Ｊ１／Ｊ２／Ｊ３／ＹＬＣ 1stラウンド）
+- **データ更新**: `npm run generate-csv-from-html` → `npm run generate-master-data`
+
+### 追加ツール
+- `scripts/convert-html-to-csv.js` — HTML→CSV変換
+- npmスクリプト `generate-csv-from-html`
+
+---
 
 ## Version 1.0.0
 

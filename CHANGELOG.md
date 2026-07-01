@@ -2,6 +2,20 @@
 
 このプロジェクトのすべての重要な変更は、このファイルに記録されます。
 
+## [2.0.0] - 2026-07-01
+
+### 追加
+- J. League Data Site 保存HTMLからCSVを生成する `scripts/convert-html-to-csv.js`
+- npmスクリプト `generate-csv-from-html`
+
+### 変更
+- 2026/27シーズン日程に合わせてマスタデータを全面更新（1,191件）
+  - `j_league_schedule_from_website_utf8.csv`
+  - `public/data/master-matches.json`
+- YLCの勝者プレースホルダー（`[n]w`）を「未定」として取り込み
+
+---
+
 ## [1.2.2] - 2026-01-XX
 
 ### 追加
