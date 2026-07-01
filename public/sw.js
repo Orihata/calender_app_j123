@@ -3,7 +3,7 @@
  * オフライン対応とキャッシュ管理
  */
 
-const CACHE_NAME = 'soccer-calendar-v2.0.1'
+const CACHE_NAME = 'soccer-calendar-v2.1.0'
 // baseパスを取得（Service Workerはグローバルスコープで実行されるため、self.location.pathnameから取得）
 const BASE_PATH = self.location.pathname.replace(/\/sw\.js$/, '') || '/'
 const MASTER_DATA_URL = BASE_PATH + (BASE_PATH.endsWith('/') ? '' : '/') + 'data/master-matches.json'

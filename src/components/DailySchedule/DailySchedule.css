@@ -1,0 +1,220 @@
+.daily-schedule {
+  padding: 1rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.daily-schedule-header {
+  margin-bottom: 1rem;
+}
+
+.daily-schedule-header h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+  color: #2c3e50;
+}
+
+.daily-schedule-date-picker {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.daily-schedule-date-picker label {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.daily-schedule-date-picker input[type='date'] {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  flex: 1;
+  min-width: 160px;
+}
+
+.daily-schedule-date-display {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.daily-schedule-empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: #666;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.daily-schedule-hidden-notice {
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #856404;
+}
+
+.daily-schedule-timeline-wrapper {
+  margin-top: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fafafa;
+  overflow: hidden;
+}
+
+.daily-schedule-timeline {
+  display: flex;
+  position: relative;
+  min-height: 720px;
+}
+
+.daily-schedule-axis {
+  flex: 0 0 52px;
+  position: relative;
+  border-right: 1px solid #ddd;
+  background: #f0f0f0;
+}
+
+.daily-schedule-axis-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  font-size: 0.7rem;
+  color: #666;
+  text-align: center;
+  padding-right: 4px;
+}
+
+.daily-schedule-grid {
+  flex: 1;
+  position: relative;
+  min-height: 720px;
+}
+
+.daily-schedule-grid-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #e8e8e8;
+  pointer-events: none;
+}
+
+.daily-schedule-blocks {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.daily-schedule-block {
+  position: absolute;
+  box-sizing: border-box;
+  padding: 4px 6px;
+  border-radius: 6px;
+  overflow: hidden;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.daily-schedule-block.venue {
+  background-color: #b3d9ff;
+  color: #003d7a;
+  border-left: 4px solid #0056b3;
+}
+
+.daily-schedule-block.broadcast {
+  background-color: #b3ffb3;
+  color: #003d00;
+  border-left: 4px solid #218838;
+}
+
+.daily-schedule-block-category {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-bottom: 2px;
+}
+
+.daily-schedule-block.venue .daily-schedule-block-category {
+  background-color: #0056b3;
+  color: white;
+}
+
+.daily-schedule-block.broadcast .daily-schedule-block-category {
+  background-color: #218838;
+  color: white;
+}
+
+.daily-schedule-block-teams {
+  font-weight: 600;
+  margin-bottom: 2px;
+  word-break: break-all;
+}
+
+.daily-schedule-block-time {
+  font-size: 0.7rem;
+  opacity: 0.9;
+}
+
+.daily-schedule-block-detail {
+  font-size: 0.65rem;
+  margin-top: 2px;
+  opacity: 0.85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.daily-schedule-legend {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: #555;
+}
+
+.daily-schedule-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.daily-schedule-legend-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+.daily-schedule-legend-swatch.venue {
+  background-color: #b3d9ff;
+  border-left: 3px solid #0056b3;
+}
+
+.daily-schedule-legend-swatch.broadcast {
+  background-color: #b3ffb3;
+  border-left: 3px solid #218838;
+}
+
+.daily-schedule-loading {
+  padding: 2rem;
+  text-align: center;
+  color: #666;
+}
+
+@media (min-width: 768px) {
+  .daily-schedule-timeline,
+  .daily-schedule-grid {
+    min-height: 840px;
+  }
+}

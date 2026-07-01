@@ -4,6 +4,7 @@ import Calendar from './components/Calendar/Calendar.jsx'
 import ImportCSV from './components/ImportCSV/ImportCSV.jsx'
 import AttendanceList from './components/AttendanceList/AttendanceList.jsx'
 import Settings from './components/Settings/Settings.jsx'
+import DailySchedule from './components/DailySchedule/DailySchedule.jsx'
 import { ensureCurrentSeasonMasterData } from './services/archiveService.js'
 import './App.css'
 
@@ -62,6 +63,7 @@ function App() {
             <Route path="/" element={<Calendar />} />
             <Route path="/import" element={<ImportCSV />} />
             <Route path="/attendance" element={<AttendanceList />} />
+            <Route path="/daily-schedule" element={<DailySchedule />} />
             <Route path="/settings" element={<Settings />} />
           </Routes>
         </main>
@@ -117,6 +119,13 @@ function Nav() {
           onClick={closeMenu}
         >
           観戦予定
+        </Link>
+        <Link 
+          to="/daily-schedule" 
+          className={location.pathname === '/daily-schedule' ? 'active' : ''}
+          onClick={closeMenu}
+        >
+          予定表
         </Link>
         <Link 
           to="/settings" 
