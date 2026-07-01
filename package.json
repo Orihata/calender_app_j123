@@ -1,6 +1,6 @@
 {
   "name": "soccer-match-calendar",
-  "version": "1.1.3",
+  "version": "2.0.0",
   "type": "module",
   "description": "サッカー試合予定カレンダーアプリケーション",
   "author": "",
@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "test": "jest",
     "test:watch": "jest --watch",
-    "generate-master-data": "node scripts/convert-csv-to-json.js"
+    "generate-master-data": "node scripts/convert-csv-to-json.js",
+    "generate-csv-from-html": "node scripts/convert-html-to-csv.js"
   },
   "dependencies": {
     "html2canvas": "^1.4.1",
