@@ -4,8 +4,7 @@ import Calendar from './components/Calendar/Calendar.jsx'
 import ImportCSV from './components/ImportCSV/ImportCSV.jsx'
 import AttendanceList from './components/AttendanceList/AttendanceList.jsx'
 import Settings from './components/Settings/Settings.jsx'
-import { loadMasterData } from './services/masterDataService.js'
-import { getAllMatches, createMatches } from './services/matchService.js'
+import { ensureCurrentSeasonMasterData } from './services/archiveService.js'
 import './App.css'
 
 function App() {
@@ -15,29 +14,12 @@ function App() {
   useEffect(() => {
     const initializeMasterData = async () => {
       try {
-        // 既存の試合予定を確認
-        const existingMatches = await getAllMatches()
-        
-        // 既にデータがある場合はスキップ（オプション: ユーザーが手動でインポートした場合）
-        // マスタデータを強制的に読み込む場合は、このチェックを削除
-        if (existingMatches.length === 0) {
-          console.log('[App] マスタデータを自動読み込み中...')
-          const masterMatches = await loadMasterData()
-          
-          if (masterMatches.length > 0) {
-            // マスタデータをインポート
-            const result = await createMatches(masterMatches.map(m => m))
-            console.log(`[App] マスタデータを読み込みました: ${result.success.length}件`)
-            if (result.errors.length > 0) {
-              console.warn(`[App] エラー: ${result.errors.length}件`)
-            }
-          }
-        } else {
-          console.log('[App] 既存の試合予定データがあるため、マスタデータの自動読み込みをスキップしました')
+        const imported = await ensureCurrentSeasonMasterData()
+        if (imported > 0) {
+          console.log(`[App] マスタデータを取り込みました: ${imported}件`)
         }
       } catch (error) {
         console.error('[App] マスタデータの自動読み込みエラー:', error)
-        // エラーが発生してもアプリは動作を継続
       } finally {
         setMasterDataLoaded(true)
       }

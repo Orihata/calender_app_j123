@@ -3,7 +3,7 @@
  * オフライン対応とキャッシュ管理
  */
 
-const CACHE_NAME = 'soccer-calendar-v1.0.1'
+const CACHE_NAME = 'soccer-calendar-v2.0.1'
 // baseパスを取得（Service Workerはグローバルスコープで実行されるため、self.location.pathnameから取得）
 const BASE_PATH = self.location.pathname.replace(/\/sw\.js$/, '') || '/'
 const MASTER_DATA_URL = BASE_PATH + (BASE_PATH.endsWith('/') ? '' : '/') + 'data/master-matches.json'
@@ -46,22 +46,20 @@ self.addEventListener('activate', (event) => {
 
 // フェッチ時にキャッシュから取得
 self.addEventListener('fetch', (event) => {
-  // マスタデータは常にキャッシュから取得を試みる
-  if (event.request.url.includes(MASTER_DATA_URL)) {
+  // マスタデータはネットワーク優先（更新を反映）、オフライン時はキャッシュ
+  if (event.request.url.includes('master-matches.json')) {
     event.respondWith(
-      caches.match(event.request).then((cachedResponse) => {
-        if (cachedResponse) {
-          return cachedResponse
-        }
-        return fetch(event.request).then((response) => {
-          // レスポンスをクローンしてキャッシュに保存
-          const responseToCache = response.clone()
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache)
-          })
+      fetch(event.request)
+        .then((response) => {
+          if (response.ok) {
+            const responseToCache = response.clone()
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseToCache)
+            })
+          }
           return response
         })
-      })
+        .catch(() => caches.match(event.request))
     )
     return
   }

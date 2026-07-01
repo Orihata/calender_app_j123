@@ -7,11 +7,12 @@ import {
   appendArchivedSeason
 } from './storage.js'
 import { loadMasterData } from './masterDataService.js'
-import { createMatches } from './matchService.js'
+import { getAllMatches, importMatchesBulk } from './matchService.js'
 import {
   SPECIAL_SEASON_2026,
   SEASON_IDS,
-  isSpecialSeason2026Date
+  isSpecialSeason2026Date,
+  isCurrentSeasonDate
 } from '../constants/seasons.js'
 
 /**
@@ -48,30 +49,54 @@ export async function getSpecialSeason2026ArchivePreview() {
 }
 
 /**
+ * 現行シーズンの試合がアクティブデータに含まれているか
+ */
+export async function hasCurrentSeasonMatches() {
+  const matches = await getAllMatches()
+  return matches.some((m) => isCurrentSeasonDate(m.date))
+}
+
+/**
  * マスタデータから未登録の試合のみ取り込む
+ * @param {{ preferNetwork?: boolean }} [options]
  * @returns {Promise<number>} 追加した試合数
  */
-export async function importMissingMasterMatches() {
-  const existing = await getMatches()
-  const existingKeys = new Set(existing.map(matchIdentityKey))
-  const masterMatches = await loadMasterData()
-  const toAdd = masterMatches.filter((m) => !existingKeys.has(matchIdentityKey(m)))
+export async function importMissingMasterMatches(options = {}) {
+  const { preferNetwork = false } = options
+  const masterMatches = await loadMasterData({ preferNetwork })
 
-  if (toAdd.length > 0) {
-    const result = await createMatches(toAdd)
-    if (result.errors.length > 0) {
-      console.warn('[ArchiveService] マスタ取込エラー:', result.errors.length, '件')
-    }
-    return result.success.length
+  if (masterMatches.length === 0) {
+    console.warn('[ArchiveService] マスタデータが空です')
+    return 0
   }
+
+  const result = await importMatchesBulk(masterMatches)
+  if (result.errors.length > 0) {
+    console.warn('[ArchiveService] マスタ取込エラー:', result.errors.length, '件')
+  }
+  return result.success
+}
+
+/**
+ * 起動時などにマスタデータの取り込みが必要か確認して実行
+ */
+export async function ensureCurrentSeasonMasterData() {
+  const existing = await getAllMatches()
+  const archived = await isSpecialSeason2026Archived()
+
+  if (existing.length === 0) {
+    return importMissingMasterMatches({ preferNetwork: true })
+  }
+
+  if (archived && !await hasCurrentSeasonMatches()) {
+    return importMissingMasterMatches({ preferNetwork: true })
+  }
+
   return 0
 }
 
 /**
  * 2026特別シーズンのユーザーデータを非可逆的にアーカイブ
- * - 特別シーズン期間の試合・観戦予定を退避
- * - アクティブデータから削除
- * - 現行マスタの未登録試合を取り込み
  */
 export async function archiveSpecialSeason2026() {
   if (await isSpecialSeason2026Archived()) {
@@ -111,7 +136,13 @@ export async function archiveSpecialSeason2026() {
   await saveMatches(remainingMatches)
   await saveAttendancePlans(remainingPlans)
 
-  const importedCount = await importMissingMasterMatches()
+  const importedCount = await importMissingMasterMatches({ preferNetwork: true })
+
+  if (importedCount === 0) {
+    throw new Error(
+      'アーカイブは完了しましたが、2026/2027シーズンのマスタデータを取り込めませんでした。ページを再読み込みしてください。'
+    )
+  }
 
   return {
     archivedMatches: archivedMatches.length,

@@ -108,6 +108,46 @@ export async function createMatches(matchesData) {
 }
 
 /**
+ * 試合予定を一括取り込み（1回の保存で反映）
+ * @param {Array<Object>} matchesData
+ * @returns {Promise<{success: number, errors: Array<Object>}>}
+ */
+export async function importMatchesBulk(matchesData) {
+  const existing = await getAllMatches()
+  const existingIds = new Set(existing.map((m) => m.id))
+  const existingKeys = new Set(
+    existing.map((m) => `${m.date}|${m.homeTeam}|${m.awayTeam}`)
+  )
+
+  const toImport = []
+  const errors = []
+
+  for (const matchData of matchesData) {
+    const identityKey = `${matchData.date}|${matchData.homeTeam}|${matchData.awayTeam}`
+    if (existingIds.has(matchData.id) || existingKeys.has(identityKey)) {
+      continue
+    }
+
+    const validation = validateMatch(matchData)
+    if (!validation.valid) {
+      errors.push({ data: matchData, error: validation.errors.join(', ') })
+      continue
+    }
+
+    toImport.push(new Match(matchData))
+    existingIds.add(matchData.id)
+    existingKeys.add(identityKey)
+  }
+
+  if (toImport.length > 0) {
+    const merged = [...existing, ...toImport]
+    await saveMatches(merged.map((m) => m.toJSON()))
+  }
+
+  return { success: toImport.length, errors }
+}
+
+/**
  * 試合予定を更新
  * @param {string} id - 試合予定のID
  * @param {Object} updateData - 更新データ

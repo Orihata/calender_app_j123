@@ -5,26 +5,35 @@
 
 /**
  * マスタデータを読み込む
+ * @param {{ preferNetwork?: boolean }} [options]
  * @returns {Promise<Array>} 試合予定の配列
  */
-export async function loadMasterData() {
+export async function loadMasterData(options = {}) {
+  const { preferNetwork = false } = options
+
   try {
-    // baseパスを考慮したパス
     const basePath = import.meta.env.BASE_URL
     const dataPath = `${basePath}data/master-matches.json`
-    
-    // まずキャッシュから取得を試みる（Service Worker経由）
-    if ('caches' in window) {
-      const cached = await caches.match(dataPath)
-      if (cached) {
-        const data = await cached.json()
-        console.log('[MasterDataService] マスタデータをキャッシュから読み込みました')
-        return data.matches || []
+    const requestUrl = preferNetwork
+      ? `${dataPath}?t=${Date.now()}`
+      : dataPath
+
+    if (!preferNetwork && 'caches' in window) {
+      const cacheKeys = [
+        dataPath,
+        new URL(dataPath, window.location.origin).href
+      ]
+      for (const key of cacheKeys) {
+        const cached = await caches.match(key)
+        if (cached) {
+          const data = await cached.json()
+          console.log('[MasterDataService] マスタデータをキャッシュから読み込みました')
+          return data.matches || []
+        }
       }
     }
 
-    // キャッシュがない場合はネットワークから取得
-    const response = await fetch(dataPath)
+    const response = await fetch(requestUrl, preferNetwork ? { cache: 'no-store' } : undefined)
     if (!response.ok) {
       throw new Error(`マスタデータの読み込みに失敗しました: ${response.status}`)
     }
@@ -33,7 +42,6 @@ export async function loadMasterData() {
     return data.matches || []
   } catch (error) {
     console.error('[MasterDataService] マスタデータ読み込みエラー:', error)
-    // エラー時は空配列を返す（アプリは動作を継続）
     return []
   }
 }
